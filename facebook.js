@@ -57,12 +57,12 @@ basicCard = function(){
 				  "imageUrl": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
 				  "buttons": [
 					{
-					  "text": "Demo",
-					  "postback": "Demo"
+					  "text": "Demo1",
+					  "postback": "Demo1"
 					},
 					{
-					  "text": "Demo",
-					  "postback": "Demo"
+					  "text": "Demo2",
+					  "postback": "Demo2"
 					}
 				  ]
 				},				 
