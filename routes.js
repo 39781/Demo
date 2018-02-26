@@ -1,9 +1,6 @@
 var express 		= require('express');
 var router			= express.Router();	 
 var DialogflowApp	=	require('actions-on-google').DialogflowApp;
-
-var serviceNowApi 	=	require('./serviceNow');
-var config 			= 	require('./config');
 var botResponses	=	{};
 var botResponses = require('./facebook.js');
 //var botResponses = require('./slack.js');

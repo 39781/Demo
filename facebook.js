@@ -1,4 +1,3 @@
-var config = require('./config');
 var responses = {};
 
 responses.quickReplies  = function(){	
@@ -62,7 +61,7 @@ responses.basicCard = function(){
 					"type": 0,
 					"speech": ""
 				}]
-		};
+		});
 	});
 }
 		
