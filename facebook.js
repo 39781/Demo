@@ -1,6 +1,15 @@
 var responses = {};
-
-responses.quickReplies  = function(){	
+responses.getResponse = function(demotype){
+	return new Promise(function(resolve, reject){
+		switch(demotype.toLowerCase()){
+			case "text response":case "simple response":resolve(simpleResponse());break;
+			case "card":case "basic card":resolve(basicCard());break;
+			case "quick replies":case "suggestionChips":resolve(quickReplies());break;
+			case "image":resolve(image());break;
+		}
+	});
+}
+quickReplies  = function(){	
 	return new Promise(function(resolve, reject){
 		resolve( {			
 			"speech": "",		
@@ -20,7 +29,7 @@ responses.quickReplies  = function(){
 	  //console.log('hari');
 	//return true;
 }
-responses.simpleResponse = function (){
+simpleResponse = function (){
 	return new Promise(function(resolve, reject){
 		resolve({			
 			"speech": "",								
@@ -36,7 +45,7 @@ responses.simpleResponse = function (){
 		});	
 	});
 }
-responses.basicCard = function(){
+basicCard = function(){
 	return new Promise(function(resolve, reject){				
 		resolve({
 			"speech": "",
@@ -65,7 +74,7 @@ responses.basicCard = function(){
 	});
 }
 		
-responses.image = function(txtMsg, callBackIntent, params){
+image = function(txtMsg, callBackIntent, params){
 	return new Promise(function(resolve, reject){	
 		resolve({			
 				"speech": "",					
