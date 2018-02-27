@@ -31,6 +31,7 @@ router.post('/botHandler',function(req, res){
 		}else{
 			getResponse(req.body.result.parameters['demotype'],botResponses)
 			.then((resp)=>{
+				console.log(resp);
 				res.json(resp).end();
 			})
 			.catch((err)=>{
