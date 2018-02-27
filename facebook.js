@@ -21,8 +21,8 @@ responses.quickReplies  = function(){
 	//return true;
 }
 responses.carousel = function(){
-	console.log('carousel started');
-	resolve({
+	return new Promise(function(resolve, reject){	
+		resolve({
 			"speech": "",
 			"messages": [{
 				  "type": 1,
@@ -80,6 +80,7 @@ responses.carousel = function(){
 					"speech": ""
 				}]
 		});
+	});
 }
 responses.simpleResponse = function (){
 	return new Promise(function(resolve, reject){
