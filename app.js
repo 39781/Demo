@@ -9,6 +9,8 @@ app.use(session({ secret: 'this-is-a-secret-token',resave: true, saveUninitializ
 app.use(bodyParser.urlencoded({ extended: false })) 
 app.use(bodyParser.json());
 app.use(routes);
+app.use(express.static('public'));
+
 global.incidentParams = {};
 var server = app.listen(port,function(){
 	console.log("Application started listening port "+port);
