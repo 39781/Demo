@@ -1,165 +1,110 @@
-var config = require('./config');
+
 var responses = {};
 
-responses.quickReplies  = function(sessionId, content, params, context){
-	console.log(content,incidentParams[sessionId]['recentInput']);
-	  /*appHandler.ask(appHandler.buildRichResponse()
-		.addSimpleResponse({speech: 'Please select option from '+contentType,
-		  displayText: 'Please select option from '+contentType})
-		.addSuggestions(content)			
-	  );*/	
-	  //return true;
-	  var chips = [];		
-		content.forEach(function(key){
-			chips.push({'title':key});
-		});
-		/*intentContextParams ={};
-		var paramsKeys = Object.keys(params);		
-		paramsKeys.forEach(function(key){
-			if(params[key].length>0){
-				intentContextParams[key] = params[key];
-			}
-		});	*/				
-		return {			
-			"speech": "",
-			"contextOut": [{
-				 "name":context, 
-				 "lifespan":2, 
-				 "parameters":params
-			}],
-			"messages": [{
-				"type": "simple_response",
-				"platform": "google",
-				"textToSpeech": "Please select option from "+incidentParams[sessionId]['recentInput'],
-				"displayText": "Please select option from "+incidentParams[sessionId]['recentInput']
-			},
-			{
-			  "type": "suggestion_chips",
-			  "platform": "google",
-			  "suggestions":chips
-			},
-			{
-			  "type": 0,
-			  "speech": ""
-			}
-			]
-		};
+responses.quickReplies  = function(appHandler){		
+	appHandler.ask(appHandler.buildRichResponse()
+		.addSimpleResponse({
+			speech: 'quickReplies demo, Please select one option',
+			displayText: 'quickReplies demo, Please select one option'
+		})
+		.addSuggestions(['demo1','demo2'])
+		.addSuggestionLink('Suggestion Link', 'https://assistant.google.com/')
+	);
 	  //console.log('hari');
-	//return true;
+	return true;
 }
-responses.simpleText = function (sessionId, promptMsg, params, context){
-	return {			
-			"speech": "",
-			"contextOut": [{
-				 "name":context, 
-				 "lifespan":2, 
-				 "parameters":params
-			}],
-			"messages": [{
-				"type": "simple_response",
-				"platform": "google",
-				"textToSpeech": promptMsg,
-				"displayText": promptMsg
-			},			
-			{
-			  "type": 0,
-			  "speech": ""
-			}
-			]
-		};
+responses.simpleResponse = function (appHandler){	
+	appHandler.ask({
+		speech: 'Demo simple response',
+		displayText: 'demo simple response'
+	});	
+	return true;
+}
+responses.basicCard = function(appHandler){	
+	appHandler,ask(appHandler.buildRichResponse()
+		// Create a basic card and add it to the rich response
+		.addSimpleResponse('Basic Card Demo')
+		.addBasicCard(app.buildBasicCard('this is simple basic card demo')
+		  .setTitle('Basic Card')
+		  .addButton('Demo1', 'Demo1')
+		  .addButton('Demo2', 'Demo2')
+		  .setImage('https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg', 'card demo')
+		  .setImageDisplay('CROPPED')
+		)	
+	);	
+	return true;
+}
+responses.list = function(appHandler){				
+	appHandler.askWithList('list demo',
+		app.buildList('Things to learn about')
+		  // Add the first item to the list
+		  .addItems(app.buildOptionItem('MATH_AND_PRIME',
+			['math', 'math and prime', 'prime numbers', 'prime'])
+			.setTitle('Math & prime numbers')
+			.setDescription('42 is an abundant number because the sum of its ' +
+			'proper divisors 54 is greater…')
+			.setImage('http://example.com/math_and_prime.jpg', 'Math & prime numbers'))
+		  // Add the second item to the list
+		  .addItems(app.buildOptionItem('EGYPT',
+			['religion', 'egpyt', 'ancient egyptian'])
+			.setTitle('Ancient Egyptian religion')
+			.setDescription('42 gods who ruled on the fate of the dead in the ' +
+			'afterworld. Throughout the under…')
+			.setImage('http://example.com/egypt', 'Egypt')
+		  )
+		  // Add third item to the list
+		  .addItems(app.buildOptionItem('RECIPES',
+			['recipes', 'recipe', '42 recipes'])
+			.setTitle('42 recipes with 42 ingredients')
+			.setDescription('Here\'s a beautifully simple recipe that\'s full ' +
+			'of flavor! All you need is some ginger and…')
+			.setImage('http://example.com/recipe', 'Recipe')
+		  )
+	);
+	return true;
+}	
+responses.image = function(appHandler){
+	appHandler,ask(appHandler.buildRichResponse()
+		// Create a basic card and add it to the rich response
+		.addSimpleResponse('Image Demo')
+		.addBasicCard(app.buildBasicCard('this is simple image demo')
+		  .setTitle('image Card')		  
+		  .setImage('https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg', 'card demo')
+		  .setImageDisplay('CROPPED')
+		)	
+	);				
 }
 
-responses.getFinalCardResponse = function(textMsg, callBackIntent, params){
-	return new Promise(function(resolve, reject){
-		var data = textMsg.split(';');		
-		
-		var rsp ={
-			"speech": "",
-			"messages": [
-				 {
-					"platform": "google",
-					"type": "simple_response",
-					"displayText": data[2], 
-					"textToSpeech": data[2], 
-				},
-				{
-				"type": "basic_card",
-				"platform": "google",
-				"title": data[0],
-				"subtitle": data[1],
-				"formattedText": "Thank you for using me, I can help you please choose any one option",
-				"image": {
-							  "url":"https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
-							  "accessibilityText":"serviceNow"
-							},
-				"buttons": [{
-								"title":"ServiceNow",
-								"openUrlAction":{
-								  "url":"dev18442.service-now.com"
-								}
-							  }]
-			},
-			{
-			  "type": "suggestion_chips",
-			  "platform": "google",
-			  "suggestions": [
-				{
-				  "title": "Create Incident"
-				},
-				{
-				  "title": "Track Incident"
-				}
-			  ]
-			},
-			{
-			  "type": 0,
-			  "speech": ""
-			}]
-		};
-		if(callBackIntent){
-			rsp.followupEvent ={
-				name:callBackIntent,
-				data:params,
-			}
-		}			
-		resolve(rsp);
-	});
-}
-		
-responses.getFinalSimpleResponse = function(txtMsg, callBackIntent, params){
-	return new Promise(function(resolve, reject){	
-		var data = textMsg.split(';');			
-		
-		var rsp ={			
-				"speech": "",					
-				"messages": [{
-					"type": "simple_response",
-					"platform": "google",						
-					displayText :data[2]+" "+data[1]+" "+data[0]+"\n Thank you for using me, I can help you please choose any one option",
-					textToSpeech :data[2]+" "+data[1]+" "+data[0]+"\n Thank you for using me, I can help you please choose any one option"
-				},
-				{
-				  "type": "suggestion_chips",
-				  "platform": "google",
-				  "suggestions":[{title:"Create Incident"},
-								 {title:"Track Incident"}
-								]
-				},{
-				  "type": 0,
-				  "speech": ""
-				}]
-			};
-		if(callBackIntent){
-			rsp.followupEvent ={
-				name:callBackIntent,
-				data:params,
-			}
-		}			
-		resolve(rsp);
-	});
+responses.carousel = function(){
+	app.askWithCarousel('Carousel Demo',
+    // Build a carousel
+    app.buildCarousel()
+    // Add the first item to the carousel
+    .addItems(app.buildOptionItem('MATH_AND_PRIME',
+      ['math', 'math and prime', 'prime numbers', 'prime'])
+      .setTitle('Math & prime numbers')
+      .setDescription('42 is an abundant number because the sum of its ' +
+        'proper divisors 54 is greater…')
+      .setImage('http://example.com/math_and_prime.jpg', 'Math & prime numbers'))
+    // Add the second item to the carousel
+    .addItems(app.buildOptionItem('EGYPT',
+      ['religion', 'egpyt', 'ancient egyptian'])
+      .setTitle('Ancient Egyptian religion')
+      .setDescription('42 gods who ruled on the fate of the dead in the ' +
+        'afterworld. Throughout the under…')
+      .setImage('http://example.com/egypt', 'Egypt')
+    )
+    // Add third item to the carousel
+    .addItems(app.buildOptionItem('RECIPES',
+      ['recipes', 'recipe', '42 recipes'])
+      .setTitle('42 recipes with 42 ingredients')
+      .setDescription('Here\'s a beautifully simple recipe that\'s full ' +
+        'of flavor! All you need is some ginger and…')
+      .setImage('http://example.com/recipe', 'Recipe')
+    )
+  );
+  return true;
 }
 
 
-responses.generateQuickReplyResponseOld = function(responseContent, responseViewModel){
-}
 module.exports = responses;

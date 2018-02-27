@@ -1,15 +1,6 @@
 var responses = {};
-responses.getResponse = function(demotype){
-	return new Promise(function(resolve, reject){
-		switch(demotype.toLowerCase()){
-			case "text response":case "simple response":resolve(simpleResponse());break;
-			case "card":case "basic card":resolve(basicCard());break;
-			case "quick replies":case "suggestionChips":resolve(quickReplies());break;
-			case "image":resolve(image());break;
-		}
-	});
-}
-quickReplies  = function(){	
+
+responses.quickReplies  = function(){	
 	return new Promise(function(resolve, reject){
 		resolve( {			
 			"speech": "",		
@@ -29,7 +20,67 @@ quickReplies  = function(){
 	  //console.log('hari');
 	//return true;
 }
-simpleResponse = function (){
+responses.carousel = function(){
+	resolve({
+			"speech": "",
+			"messages": [{
+				  "type": 1,
+				  "platform": "facebook",
+				  "title": "card1",
+				  "subtitle": "demo",
+				  "imageUrl": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
+				  "buttons": [
+					{
+					  "text": "Demo1",
+					  "postback": "Demo1"
+					},
+					{
+					  "text": "Demo2",
+					  "postback": "Demo2"
+					}
+				  ]
+				},
+				{
+				  "type": 1,
+				  "platform": "facebook",
+				  "title": "card2",
+				  "subtitle": "demo",
+				  "imageUrl": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
+				  "buttons": [
+					{
+					  "text": "Demo1",
+					  "postback": "Demo1"
+					},
+					{
+					  "text": "Demo2",
+					  "postback": "Demo2"
+					}
+				  ]
+				},				 
+				{
+				  "type": 1,
+				  "platform": "facebook",
+				  "title": "card3",
+				  "subtitle": "demo",
+				  "imageUrl": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
+				  "buttons": [
+					{
+					  "text": "Demo1",
+					  "postback": "Demo1"
+					},
+					{
+					  "text": "Demo2",
+					  "postback": "Demo2"
+					}
+				  ]
+				},
+				{
+					"type": 0,
+					"speech": ""
+				}]
+		});
+}
+responses.simpleResponse = function (){
 	return new Promise(function(resolve, reject){
 		resolve({			
 			"speech": "",								
@@ -45,7 +96,7 @@ simpleResponse = function (){
 		});	
 	});
 }
-basicCard = function(){
+responses.basicCard = function(){
 	return new Promise(function(resolve, reject){				
 		resolve({
 			"speech": "",
@@ -74,7 +125,7 @@ basicCard = function(){
 	});
 }
 		
-image = function(txtMsg, callBackIntent, params){
+responses.image = function(){
 	return new Promise(function(resolve, reject){	
 		resolve({			
 				"speech": "",					

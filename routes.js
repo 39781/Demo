@@ -2,8 +2,9 @@ var express 		= require('express');
 var router			= express.Router();	 
 var DialogflowApp	=	require('actions-on-google').DialogflowApp;
 
-
-
+//let botResponses = require('./google');		
+let botResponses = require('./facebook');		
+//let botResponses = require('./slack');		
 router.get('/',function(req, res){
 	console.log('req received');
 	res.send("req received");
@@ -21,17 +22,46 @@ router.post('/botHandler',function(req, res){
 		let inputContexts = req.body.result.contexts; // https://dialogflow.com/docs/contexts	
 		var sessionId = (req.body.sessionId)?req.body.sessionId:'';
 		var resolvedQuery = req.body.result.resolvedQuery;	
-		botResponses = require('./'+requestSource);		
+		let botResponses = require('./'+requestSource);		
+		if(requestSource == 'google'){
+			let appHandler = new DialogflowApp({request: req, response: res});
+			googleAssitant(req.body.result.parameters['demotype'], botResponses, appHandler)
+			.then((resp)=>{console.log(resp);})
+			.catch((err)=>{console.log(err);})
+		}else{
+			getResponse(req.body.result.parameters['demotype'],botResponses)
+			.then((resp)=>{
+				res.json(resp).end();
+			})
+			.catch((err)=>{
+				res.json(err).end();
+			});
+		}
 		
-		botResponses.getResponse(req.body.result.parameters['demotype'])
-		.then((resp)=>{
-			res.json(resp).end();
-		})
-		.catch((err)=>{
-			res.json(err).end();
-		});
 });
+getResponse = function(demotype,botResponses){
+	return new Promise(function(resolve, reject){
+		switch(demotype.toLowerCase()){
+			case "text response":case "simple response":resolve(botResponses.simpleResponse());break;
+			case "card":case "basic card":resolve(botResponses.basicCard());break;
+			case "quick replies":case "suggestionChips":resolve(botResponses.quickReplies());break;
+			case "image":resolve(botResponses.image());break;
+			case 'carousel':resolve(botResponses.carousel());break;
+		}
+	});
+}
 
+googleAssitant = function(demotype, botResponses,appHandler){
+	return new Promise(function(resolve, reject){		
+		switch(demotype.toLowerCase()){
+			case "text response":case "simple response":resolve(botResponses.simpleResponse(appHandler));break;
+			case "card":case "basic card":resolve(botResponses.basicCard(appHandler));break;
+			case "quick replies":case "suggestionChips":resolve(botResponses.quickReplies(appHandler));break;
+			case "image":resolve(botResponses.image());break;
+			case 'carousel':resolve(botResponses.carousel());break;
+		}
+	});
+}
 
 module.exports = router;
 
