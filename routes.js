@@ -23,23 +23,56 @@ router.post('/botHandler',function(req, res){
 		var sessionId = (req.body.sessionId)?req.body.sessionId:'';
 		var resolvedQuery = req.body.result.resolvedQuery;	
 		let botResponses = require('./'+requestSource);		
-		if(requestSource == 'google'){
-			let appHandler = new DialogflowApp({request: req, response: res});
-			googleAssitant(req.body.result.parameters['demotype'], botResponses, appHandler)
-			.then((resp)=>{console.log(resp);})
-			.catch((err)=>{console.log(err);})
-		}else{
-			getResponse(req.body.result.parameters['demotype'],botResponses)
-			.then((resp)=>{
-				console.log(resp);
-				res.json(resp).end();
-			})
-			.catch((err)=>{
-				res.json(err).end();
-			});
+		if(resolvedQuery == 'login'){
+			let resp = openLoginWebView();
+			res.json().end();
+		}else{			
+			if(requestSource == 'google'){
+				let appHandler = new DialogflowApp({request: req, response: res});
+				googleAssitant(req.body.result.parameters['demotype'], botResponses, appHandler)
+				.then((resp)=>{console.log(resp);})
+				.catch((err)=>{console.log(err);})
+			}else{
+				getResponse(req.body.result.parameters['demotype'],botResponses)
+				.then((resp)=>{
+					console.log(resp);
+					res.json(resp).end();
+				})
+				.catch((err)=>{
+					res.json(err).end();
+				});
+			}
 		}
 		
 });
+openLoginWebView = function(){
+	return {
+    "recipient":{
+        "id": "some ID"
+    },
+    "message": {
+        "attachment":{
+            "payload":{
+                "elements":[{
+                    "buttons": [{
+                        "title":"Webview example",
+                        "type":"web_url",
+                        "url":"http://www.example.com",
+                        "webview_height_ratio":"compact"
+                    }],
+                    "image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
+                    "item_url": "http://www.example.com",
+                    "subtitle":"It's a TV!",
+                    "title":"Some TV"
+                }],
+                "template_type":"generic"
+            },
+            "type":"template"
+        }
+    }
+}
+	
+}
 getResponse = function(demotype,botResponses){
 	return new Promise(function(resolve, reject){
 		switch(demotype.toLowerCase()){
