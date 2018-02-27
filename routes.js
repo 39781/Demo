@@ -25,6 +25,7 @@ router.post('/botHandler',function(req, res){
 		let botResponses = require('./'+requestSource);		
 		if(resolvedQuery.toLowerCase() == 'login'){
 			let resp = openLoginWebView();
+			console.log(resp);
 			res.json().end();
 		}else{			
 			if(requestSource == 'google'){
