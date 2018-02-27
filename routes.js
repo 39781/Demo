@@ -23,7 +23,7 @@ router.post('/botHandler',function(req, res){
 		var sessionId = (req.body.sessionId)?req.body.sessionId:'';
 		var resolvedQuery = req.body.result.resolvedQuery;	
 		let botResponses = require('./'+requestSource);		
-		if(resolvedQuery.toLowerCase() == 'login'){
+		if(action.toLowerCase() == 'demo'){
 			let resp = openLoginWebView();
 			console.log(JSON.stringify(resp));
 			res.json().end();
@@ -59,7 +59,7 @@ openLoginWebView = function(){
                 "type": "template",
                 "payload": {
                   "template_type": "button",
-                  "text": "Webview login ",
+                  "text": "Please login",
                   "buttons": [
                     {
                       "type": "web_url",
