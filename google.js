@@ -75,19 +75,19 @@ responses.image = function(appHandler){
 	);				
 }
 
-responses.carousel = function(){
-	app.askWithCarousel('Carousel Demo',
+responses.carousel = function(appHandler){
+	appHandler.askWithCarousel('Carousel Demo',
     // Build a carousel
-    app.buildCarousel()
+    appHandler.buildCarousel()
     // Add the first item to the carousel
-    .addItems(app.buildOptionItem('MATH_AND_PRIME',
+    .addItems(appHandler.buildOptionItem('MATH_AND_PRIME',
       ['math', 'math and prime', 'prime numbers', 'prime'])
       .setTitle('Math & prime numbers')
       .setDescription('42 is an abundant number because the sum of its ' +
         'proper divisors 54 is greater…')
       .setImage('http://example.com/math_and_prime.jpg', 'Math & prime numbers'))
     // Add the second item to the carousel
-    .addItems(app.buildOptionItem('EGYPT',
+    .addItems(appHandler.buildOptionItem('EGYPT',
       ['religion', 'egpyt', 'ancient egyptian'])
       .setTitle('Ancient Egyptian religion')
       .setDescription('42 gods who ruled on the fate of the dead in the ' +
@@ -95,7 +95,7 @@ responses.carousel = function(){
       .setImage('http://example.com/egypt', 'Egypt')
     )
     // Add third item to the carousel
-    .addItems(app.buildOptionItem('RECIPES',
+    .addItems(appHandler.buildOptionItem('RECIPES',
       ['recipes', 'recipe', '42 recipes'])
       .setTitle('42 recipes with 42 ingredients')
       .setDescription('Here\'s a beautifully simple recipe that\'s full ' +
