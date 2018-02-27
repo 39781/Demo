@@ -48,29 +48,38 @@ router.post('/botHandler',function(req, res){
 });
 openLoginWebView = function(){
 	return {
-	  "type": 4,
-	  "platform": "facebook",
-	  "payload": {
-		"facebook": {
-		  "attachment": {
-			"type": "template",
-			"payload": {
-			  "template_type": "button",
-			  "text": "Webview login form",
-			  "buttons": [
-				{
-				  "type": "web_url",
-				  "url": "https://desolate-beach-84758.herokuapp.com/login.html",
-				  "title": "Login",
-				  "webview_height_ratio": "tall",
-				  "messenger_extensions": "true"
-				}
-			  ]
-			}
-		  }
-		}
-	  }
-	};
+      "speech": "",
+      "messages": [
+        {
+          "type": 4,
+          "platform": "facebook",
+          "payload": {
+            "facebook": {
+              "attachment": {
+                "type": "template",
+                "payload": {
+                  "template_type": "button",
+                  "text": "Webview login ",
+                  "buttons": [
+                    {
+                      "type": "web_url",
+                      "url": "https://desolate-beach-84758.herokuapp.com/login.html",
+                      "title": "Login",
+                      "webview_height_ratio": "tall",
+                      "messenger_extensions": "true"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": 0,
+          "speech": ""
+        }
+      ]
+    }
 	
 }
 getResponse = function(demotype,botResponses){
