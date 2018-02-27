@@ -21,7 +21,7 @@ responses.simpleResponse = function (appHandler){
 	return true;
 }
 responses.basicCard = function(appHandler){	
-	appHandler,ask(appHandler.buildRichResponse()
+	appHandler.ask(appHandler.buildRichResponse()
 		// Create a basic card and add it to the rich response
 		.addSimpleResponse('Basic Card Demo')
 		.addBasicCard(appHandler.buildBasicCard('this is simple basic card demo')
