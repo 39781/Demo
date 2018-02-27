@@ -64,7 +64,7 @@ responses.list = function(appHandler){
 	return true;
 }	
 responses.image = function(appHandler){
-	appHandler,ask(appHandler.buildRichResponse()
+	appHandler.ask(appHandler.buildRichResponse()
 		// Create a basic card and add it to the rich response
 		.addSimpleResponse('Image Demo')
 		.addBasicCard(app.buildBasicCard('this is simple image demo')
