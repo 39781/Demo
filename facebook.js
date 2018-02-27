@@ -21,6 +21,7 @@ responses.quickReplies  = function(){
 	//return true;
 }
 responses.carousel = function(){
+	console.log('carousel started');
 	resolve({
 			"speech": "",
 			"messages": [{
@@ -142,7 +143,4 @@ responses.image = function(){
 	});
 }
 
-
-responses.generateQuickReplyResponseOld = function(responseContent, responseViewModel){
-}
 module.exports = responses;
