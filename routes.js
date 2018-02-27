@@ -23,7 +23,7 @@ router.post('/botHandler',function(req, res){
 		var sessionId = (req.body.sessionId)?req.body.sessionId:'';
 		var resolvedQuery = req.body.result.resolvedQuery;	
 		let botResponses = require('./'+requestSource);		
-		if(resolvedQuery == 'login'){
+		if(resolvedQuery.toLowerCase() == 'login'){
 			let resp = openLoginWebView();
 			res.json().end();
 		}else{			
@@ -47,30 +47,31 @@ router.post('/botHandler',function(req, res){
 });
 openLoginWebView = function(){
 	return {
-    "recipient":{
-        "id": "some ID"
-    },
-    "message": {
-        "attachment":{
-            "payload":{
-                "elements":[{
-                    "buttons": [{
-                        "title":"Webview example",
-                        "type":"web_url",
-                        "url":"http://www.example.com",
-                        "webview_height_ratio":"compact"
-                    }],
-                    "image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
-                    "item_url": "http://www.example.com",
-                    "subtitle":"It's a TV!",
-                    "title":"Some TV"
-                }],
-                "template_type":"generic"
-            },
-            "type":"template"
-        }
-    }
-}
+		"recipient":{
+			"id": "some ID"
+		},
+		"message": {
+			"attachment":{
+				"payload":{
+					"elements":[{
+						"buttons": [{
+							"title":"Webview example",
+							"type":"web_url",
+							"url":" https://desolate-beach-84758.herokuapp.com/login.html",
+							"webview_height_ratio":"compact",
+							"messenger_extensions": "true"
+						}],
+						"image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
+						"item_url": "",
+						"subtitle":"shows Rich messages demo",
+						"title":"Demo App"
+					}],
+					"template_type":"generic"
+				},
+				"type":"template"
+			}
+		}
+	}
 	
 }
 getResponse = function(demotype,botResponses){
