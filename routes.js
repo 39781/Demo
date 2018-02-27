@@ -55,7 +55,7 @@ openLoginWebView = function(){
 				"image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
 				"item_url": "",
 				"subtitle":"shows Rich messages demo",
-				"title":"Demo App"				  
+				"title":"Demo App",				  
 				"buttons": [{
 					"title":"Webview example",
 					"type":"web_url",
