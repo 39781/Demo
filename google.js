@@ -24,7 +24,7 @@ responses.basicCard = function(appHandler){
 	appHandler,ask(appHandler.buildRichResponse()
 		// Create a basic card and add it to the rich response
 		.addSimpleResponse('Basic Card Demo')
-		.addBasicCard(app.buildBasicCard('this is simple basic card demo')
+		.addBasicCard(appHandler.buildBasicCard('this is simple basic card demo')
 		  .setTitle('Basic Card')
 		  .addButton('Demo1', 'Demo1')
 		  .addButton('Demo2', 'Demo2')
@@ -36,16 +36,16 @@ responses.basicCard = function(appHandler){
 }
 responses.list = function(appHandler){				
 	appHandler.askWithList('list demo',
-		app.buildList('Things to learn about')
+		appHandler.buildList('Things to learn about')
 		  // Add the first item to the list
-		  .addItems(app.buildOptionItem('MATH_AND_PRIME',
+		  .addItems(appHandler.buildOptionItem('MATH_AND_PRIME',
 			['math', 'math and prime', 'prime numbers', 'prime'])
 			.setTitle('Math & prime numbers')
 			.setDescription('42 is an abundant number because the sum of its ' +
 			'proper divisors 54 is greater…')
 			.setImage('http://example.com/math_and_prime.jpg', 'Math & prime numbers'))
 		  // Add the second item to the list
-		  .addItems(app.buildOptionItem('EGYPT',
+		  .addItems(appHandler.buildOptionItem('EGYPT',
 			['religion', 'egpyt', 'ancient egyptian'])
 			.setTitle('Ancient Egyptian religion')
 			.setDescription('42 gods who ruled on the fate of the dead in the ' +
@@ -53,7 +53,7 @@ responses.list = function(appHandler){
 			.setImage('http://example.com/egypt', 'Egypt')
 		  )
 		  // Add third item to the list
-		  .addItems(app.buildOptionItem('RECIPES',
+		  .addItems(appHandler.buildOptionItem('RECIPES',
 			['recipes', 'recipe', '42 recipes'])
 			.setTitle('42 recipes with 42 ingredients')
 			.setDescription('Here\'s a beautifully simple recipe that\'s full ' +
@@ -67,7 +67,7 @@ responses.image = function(appHandler){
 	appHandler.ask(appHandler.buildRichResponse()
 		// Create a basic card and add it to the rich response
 		.addSimpleResponse('Image Demo')
-		.addBasicCard(app.buildBasicCard('this is simple image demo')
+		.addBasicCard(appHandler.buildBasicCard('this is simple image demo')
 		  .setTitle('image Card')		  
 		  .setImage('https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg', 'card demo')
 		  .setImageDisplay('CROPPED')
