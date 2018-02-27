@@ -3,7 +3,7 @@ var router			= express.Router();
 var DialogflowApp	=	require('actions-on-google').DialogflowApp;
 
 //let botResponses = require('./google');		
-let botResponses = require('./facebook');		
+//let botResponses = require('./facebook');		
 //let botResponses = require('./slack');		
 router.get('/',function(req, res){
 	console.log('req received');
