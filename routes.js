@@ -48,6 +48,27 @@ router.post('/botHandler',function(req, res){
 });
 openLoginWebView = function(){
 	return {
+			"speech": "",
+			"messages": [{
+				"type": 1,
+				"platform": "facebook",
+				"image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
+				"item_url": "",
+				"subtitle":"shows Rich messages demo",
+				"title":"Demo App"				  
+				"buttons": [{
+					"title":"Webview example",
+					"type":"web_url",
+					"url":" https://desolate-beach-84758.herokuapp.com/login.html",
+					"webview_height_ratio":"compact",
+					"messenger_extensions": "true"
+				}]
+			},				 
+			{
+				"type": 0,
+				"speech": ""
+			}]
+		};/*{
 		"recipient":{
 			"id": "some ID"
 		},
@@ -72,7 +93,7 @@ openLoginWebView = function(){
 				"type":"template"
 			}
 		}
-	}
+	}*/
 	
 }
 getResponse = function(demotype,botResponses){
