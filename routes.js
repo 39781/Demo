@@ -48,52 +48,29 @@ router.post('/botHandler',function(req, res){
 });
 openLoginWebView = function(){
 	return {
-			"speech": "",
-			"messages": [{
-				"type": 1,
-				"platform": "facebook",
-				"image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
-				"item_url": "",
-				"subtitle":"shows Rich messages demo",
-				"title":"Demo App",				  
-				"buttons": [{
-					"title":"Webview example",
-					"type":"web_url",
-					"url":" https://desolate-beach-84758.herokuapp.com/login.html",
-					"webview_height_ratio":"compact",
-					"messenger_extensions": "true"
-				}]
-			},				 
-			{
-				"type": 0,
-				"speech": ""
-			}]
-		};/*{
-		"recipient":{
-			"id": "some ID"
-		},
-		"message": {
-			"attachment":{
-				"payload":{
-					"elements":[{
-						"buttons": [{
-							"title":"Webview example",
-							"type":"web_url",
-							"url":" https://desolate-beach-84758.herokuapp.com/login.html",
-							"webview_height_ratio":"compact",
-							"messenger_extensions": "true"
-						}],
-						"image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
-						"item_url": "",
-						"subtitle":"shows Rich messages demo",
-						"title":"Demo App"
-					}],
-					"template_type":"generic"
-				},
-				"type":"template"
+	  "type": 4,
+	  "platform": "facebook",
+	  "payload": {
+		"facebook": {
+		  "attachment": {
+			"type": "template",
+			"payload": {
+			  "template_type": "button",
+			  "text": "Webview login form",
+			  "buttons": [
+				{
+				  "type": "web_url",
+				  "url": "https://desolate-beach-84758.herokuapp.com/login.html",
+				  "title": "Login",
+				  "webview_height_ratio": "tall",
+				  "messenger_extensions": "true"
+				}
+			  ]
 			}
+		  }
 		}
-	}*/
+	  }
+	};
 	
 }
 getResponse = function(demotype,botResponses){
