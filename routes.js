@@ -57,8 +57,8 @@ googleAssitant = function(demotype, botResponses,appHandler){
 			case "text response":case "simple response":resolve(botResponses.simpleResponse(appHandler));break;
 			case "card":case "basic card":resolve(botResponses.basicCard(appHandler));break;
 			case "quick replies":case "suggestionChips":resolve(botResponses.quickReplies(appHandler));break;
-			case "image":resolve(botResponses.image());break;
-			case 'carousel':resolve(botResponses.carousel());break;
+			case "image":resolve(botResponses.image(appHandler));break;
+			case 'carousel':resolve(botResponses.carousel(appHandler));break;
 		}
 	});
 }
