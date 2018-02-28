@@ -24,8 +24,8 @@ router.post('/botHandler',function(req, res){
 		var resolvedQuery = req.body.result.resolvedQuery;	
 		let botResponses = require('./'+requestSource);		
 		if(action.toLowerCase() == 'demo'){
-			res.setHeader(' X-Frame-Options','ALLOW-FROM https://www.messenger.com');
-			res.setHeader(' X-Frame-Options','ALLOW-FROM https://www.facebook.com');
+			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.messenger.com');
+			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.facebook.com');
 			let resp = openLoginWebView();
 			console.log(JSON.stringify(resp));
 			res.json(resp).end();
