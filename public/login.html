@@ -28,7 +28,7 @@ function onSignIn(googleUser) {
 			document.getElementById("status").innerHTML = "Invalid user please sign in with valid user";
 		}
 	};
-	xhr.open('GET', 'https://https://desolate-beach-84758.herokuapp.com/validateUser/'+id_token,true);
+	xhr.open('GET', 'https://https://desolate-beach-84758.herokuapp.com/validateUser/?accessToken='+id_token,true);
 	//xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');		
 	xhr.send();
 }

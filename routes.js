@@ -37,11 +37,12 @@ function verify(token) {
 	});
 }
 router.get('/test',function(req,res){
+	console.log(req.query.hari);
 	res.end("test called");
 })
-router.get('/validateUser/:accessToken',function(req, res){
-	console.log(req.params.accessToken);
-	verify(req.params.accessToken)
+router.get('/validateUser',function(req, res){
+	console.log(req.query.accessToken);
+	verify(req.query.accessToken)
 	.then((resp)=>{		
 		console.log(resp);
 		if(resp.userValid){
