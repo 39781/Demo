@@ -46,9 +46,9 @@ router.post('/validateUser',function(req, res){
 	.then((resp)=>{		
 		console.log(resp);
 		if(resp.userValid){
-			res.status(400);
-		}else{
 			res.status(200);
+		}else{
+			res.status(400);
 		}		
 		res.json(resp).end();
 	})
