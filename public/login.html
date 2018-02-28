@@ -19,7 +19,7 @@ function onSignIn(googleUser) {
 	var profile = googleUser.getBasicProfile();
 	var id_token = googleUser.getAuthResponse().id_token;  
 	console.log('Name: ' + profile.getName());
-
+alert('aigned');
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
