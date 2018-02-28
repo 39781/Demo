@@ -24,14 +24,19 @@ function verify(token) {
 		  idToken: token,
 		  audience: '93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com',  
 	  },function(e, ticket){
-		   const payload = ticket.getPayload();
-		  const userid = payload['sub'];
-		  console.log(payload);
-		  if(payload['iss']=='accounts.google.com'&&payload['aud']=='93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com'&&payload['email_verified']){
-			  resolve({name:payload['name'],userId : payload['sub'],userValid:true});
+		  if(e){
+			  resolve({userValid:false});
 		  }else{
-			  resolve({name:payload['name'],userId : payload['sub'],userValid:false});
-		  }	
+			const payload = ticket.getPayload();
+			const userid = payload['sub'];
+			console.log(payload);
+			if(payload['iss']=='accounts.google.com'&&payload['aud']=='93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com'&&payload['email_verified']){
+				resolve({name:payload['name'],userId : payload['sub'],userValid:true});
+			}else{
+				resolve({name:payload['name'],userId : payload['sub'],userValid:false});
+			}	  
+		  }
+		  
 	  });	  
 	 	  
 	});
