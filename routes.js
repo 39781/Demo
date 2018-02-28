@@ -23,11 +23,11 @@ router.post('/botHandler',function(req, res){
 		var sessionId = (req.body.sessionId)?req.body.sessionId:'';
 		var resolvedQuery = req.body.result.resolvedQuery;	
 		let botResponses = require('./'+requestSource);		
-		if(action.toLowerCase() == 'demo'){
-			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.messenger.com');
-			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.facebook.com');
+		if(action.toLowerCase() == 'demo'){			
 			let resp = openLoginWebView();
 			console.log(JSON.stringify(resp));
+			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.messenger.com');
+			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.facebook.com');
 			res.json(resp).end();
 		}else{			
 			if(requestSource == 'google'){
