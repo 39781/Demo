@@ -33,9 +33,9 @@ function verify() {
 	});
 }
 
-router.get('/validateUser',function(req,res){
-	console.log(JSON.stringify(req));
-	verify(req.body.tokenId)
+router.get('/validateUser/:accessToken',function(req,res){
+	console.log(req.params.accessToken);
+	verify(req.params.accessToken)
 	.then((resp)=>{		
 		res.status(200);
 		res.json(resp).end();
