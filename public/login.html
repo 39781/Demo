@@ -35,27 +35,17 @@ function onSignIn(googleUser) {
 }
 
 function webViewClose(name){
-	let message = {
-		"attachment":{
-			"type":"template",
-			"payload":{
-			  "template_type":"generic",
-			  "elements": [{
-				"title":name,
-				"image_url": "https://bot.peters-hats.com/img/hats/fez.jpg",
-				"subtitle": "My result: Fez",
-				"default_action":{
-				  "type":"web_url",
-				  "url": "https://bot.peters-hats.com/view_quiz_results.php?user=24601"
-				},
-				"buttons":[{
-				  "type":"web_url",
-				  "url":"https://bot.peters-hats.com/hatquiz.php?referer=24601",
-				  "title":"Take the Quiz"
-				}]
-			  }]
-			}
-		}
+	let message = {			
+		"speech": "",								
+		"messages": [{
+		  "type": 0,
+		  "platform": "facebook",
+		  "speech": name
+		},	
+		{
+		  "type": 0,
+		  "speech": ""
+		}]
 	};
 	MessengerExtensions.beginShareFlow(function(share_response) {
 	  // User dismissed without error, but did they share the message?
