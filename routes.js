@@ -40,9 +40,9 @@ router.get('/test',function(req,res){
 	console.log(req.query.hari);
 	res.end("test called");
 })
-router.get('/validateUser',function(req, res){
-	console.log(req.query.accessToken);
-	verify(req.query.accessToken)
+router.post('/validateUser',function(req, res){
+	console.log(req.body.accessToken);
+	verify(req.body.accessToken)
 	.then((resp)=>{		
 		console.log(resp);
 		if(resp.userValid){
