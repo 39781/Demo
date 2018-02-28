@@ -29,7 +29,7 @@ function onSignIn(googleUser) {
 		}
 	};
 	xhr.open('POST', 'https://desolate-beach-84758.herokuapp.com/validateUser',true);
-	setRequestHeader("Content-Type", "application/json;charset=UTF-8");		
+	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");		
 	xhr.send(JSON.stringify({accessToken:id_token}));
 }
 
