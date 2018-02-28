@@ -17,6 +17,7 @@ router.get('/',function(req, res){
 
 
 function verify() {
+	console.log('verify calling');
 	return new Promise(function(resolve, reject){
 	  const ticket = client.verifyIdToken({
 		  idToken: token,
@@ -33,8 +34,9 @@ function verify() {
 }
 
 router.get('/validateUser',function(req,res){
+	console.log(JSON.stringify(req));
 	verify(req.body.tokenId)
-	.then((resp)=>{
+	.then((resp)=>{		
 		res.status(200);
 		res.json(resp).end();
 	})
