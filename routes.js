@@ -42,7 +42,11 @@ router.get('/validateUser/:accessToken',function(req,res){
 	verify(req.params.accessToken)
 	.then((resp)=>{		
 		console.log(resp);
-		res.status(200);
+		if(resp.userValid){
+			res.status(400);
+		}else{
+			res.status(200);
+		}		
 		res.json(resp).end();
 	})
 	.catch((err)=>{
