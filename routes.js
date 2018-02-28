@@ -36,8 +36,10 @@ function verify(token) {
 	 	  
 	});
 }
-
-router.get('/validateUser/:accessToken',function(req,res){
+router.get('/test',function(req,res){
+	res.end("test called");
+})
+router.get('/validateUser/:accessToken',function(req, res){
 	console.log(req.params.accessToken);
 	verify(req.params.accessToken)
 	.then((resp)=>{		
