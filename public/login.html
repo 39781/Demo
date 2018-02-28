@@ -23,7 +23,8 @@ function onSignIn(googleUser) {
 	xhr.onreadystatechange = function() {
 		console.log(this.readyState);
 		if (this.readyState == 4 && this.status == 200) {
-		   return webViewClose();		   
+			document.getElementById("status").innerHTML = "user validated : login success";
+			return webViewClose(profile.getName());		   
 		}else{
 			document.getElementById("status").innerHTML = "Invalid user please sign in with valid user";
 		}
@@ -33,14 +34,14 @@ function onSignIn(googleUser) {
 	xhr.send(JSON.stringify({accessToken:id_token}));
 }
 
-function webViewClose(){
+function webViewClose(name){
 	let message = {
 		"attachment":{
 			"type":"template",
 			"payload":{
 			  "template_type":"generic",
 			  "elements": [{
-				"title":profile.getName(),
+				"title":name,
 				"image_url": "https://bot.peters-hats.com/img/hats/fez.jpg",
 				"subtitle": "My result: Fez",
 				"default_action":{
