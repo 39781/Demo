@@ -26,7 +26,7 @@ router.post('/botHandler',function(req, res){
 		if(action.toLowerCase() == 'demo'){
 			let resp = openLoginWebView();
 			console.log(JSON.stringify(resp));
-			res.json().end();
+			res.json(resp).end();
 		}else{			
 			if(requestSource == 'google'){
 				let appHandler = new DialogflowApp({request: req, response: res});
