@@ -2,8 +2,9 @@ var express 		= require('express');
 var router			= express.Router();	 
 var DialogflowApp	=	require('actions-on-google').DialogflowApp;
 const {OAuth2Client} = require('google-auth-library');
-const client = new OAuth2Client('93244704256-87ndn70r1edcqr4c0jmjkdivqua4heg5.apps.googleusercontent.com');
-
+const client = new OAuth2Client('93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com');
+//client id = 93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com
+//secret = 5_m-HkHU6_V1HnXMNL7R2WJ7
 //let botResponses = require('./google');		
 //let botResponses = require('./facebook');		
 //let botResponses = require('./slack');		
@@ -19,7 +20,7 @@ function verify() {
 	return new Promise(function(resolve, reject){
 	  const ticket = client.verifyIdToken({
 		  idToken: token,
-		  audience: '93244704256-87ndn70r1edcqr4c0jmjkdivqua4heg5.apps.googleusercontent.com',  
+		  audience: '93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com',  
 	  });
 	  const payload = ticket.getPayload();
 	  const userid = payload['sub'];
