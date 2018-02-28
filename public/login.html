@@ -1,5 +1,6 @@
 <html>
-<body>
+<head>
+<meta name="google-signin-client_id" content="93244704256-87ndn70r1edcqr4c0jmjkdivqua4heg5.apps.googleusercontent.com">
 <script>
 (function(d, s, id){
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -11,13 +12,70 @@
 window.extAsyncInit = function() {
   // the Messenger Extensions JS SDK is done loading 
 };
+
+function onSignIn(googleUser) {
+	var profile = googleUser.getBasicProfile();
+	var id_token = googleUser.getAuthResponse().id_token;  
+	console.log('Name: ' + profile.getName());
+
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+		   return webViewClose();		   
+		}else{
+			document.getElementById("status").innerHTML = "Invalid user please sign in with valid user";
+		}
+	};
+	xhr.open('GET', 'https://https://desolate-beach-84758.herokuapp.com/validateUser/'+id_token,true);
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');		
+	xhr.send();
+}
+
+function webViewClose(){
+	let message = {
+		"attachment":{
+			"type":"template",
+			"payload":{
+			  "template_type":"generic",
+			  "elements": [{
+				"title":profile.getName(),
+				"image_url": "https://bot.peters-hats.com/img/hats/fez.jpg",
+				"subtitle": "My result: Fez",
+				"default_action":{
+				  "type":"web_url",
+				  "url": "https://bot.peters-hats.com/view_quiz_results.php?user=24601"
+				},
+				"buttons":[{
+				  "type":"web_url",
+				  "url":"https://bot.peters-hats.com/hatquiz.php?referer=24601",
+				  "title":"Take the Quiz"
+				}]
+			  }]
+			}
+		}
+	};
+	MessengerExtensions.beginShareFlow(function(share_response) {
+	  // User dismissed without error, but did they share the message?
+	  if(share_response.is_sent){
+		MessengerExtensions.requestCloseBrowser(function success() {
+		
+		}, function error(err) {
+		  // an error occurred
+		});
+	  }
+	}, 
+	function(errorCode, errorMessage) {      
+	// An error occurred in the process
+
+	},
+	message,
+	"broadcast");	
+}
 </script>
-<pre>
-<form>
-username : <input type="text"/>
-password : <input type ="password"/>
-<input type="submit" value="Login"/>
-</form
-</pre>
+
+</head>
+<body>
+<div class="g-signin2" data-onsuccess="onSignIn"></div>
+<div id="status"></div>
 </body>
 </html>

@@ -1,6 +1,8 @@
 var express 		= require('express');
 var router			= express.Router();	 
 var DialogflowApp	=	require('actions-on-google').DialogflowApp;
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client('93244704256-87ndn70r1edcqr4c0jmjkdivqua4heg5');
 
 //let botResponses = require('./google');		
 //let botResponses = require('./facebook');		
@@ -12,6 +14,34 @@ router.get('/',function(req, res){
 })
 
 
+
+function verify() {
+	return new Promise(function(resolve, reject){
+	  const ticket = client.verifyIdToken({
+		  idToken: token,
+		  audience: '93244704256-87ndn70r1edcqr4c0jmjkdivqua4heg5',  
+	  });
+	  const payload = ticket.getPayload();
+	  const userid = payload['sub'];
+	  if(payload['iss']=='https://accounts.google.com'&&payload['aud']=='93244704256-87ndn70r1edcqr4c0jmjkdivqua4heg5.apps.googleusercontent.com'&&payload['email_verified']){
+		  resolve({name:payload['name'],userId : payload['sub'],userValid:true});
+	  }else{
+		  resolve({name:payload['name'],userId : payload['sub'],userValid:false});
+	  }		  
+	});
+}
+
+router.get('/validateUser',function(req,res){
+	verify(req.body.tokenId)
+	.then((resp)=>{
+		res.status(200);
+		res.json(resp).end();
+	})
+	.catch((err)=>{		
+		res.status(400);
+		res.json(err).end();
+	});	
+});
 router.post('/botHandler',function(req, res){
 	//console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
 	console.log('Dialogflow Request body: ' + JSON.stringify(req.body));	
