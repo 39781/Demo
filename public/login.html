@@ -35,17 +35,18 @@ function onSignIn(googleUser) {
 }
 
 function webViewClose(name){
-	let message = {			
-		"speech": "",								
-		"messages": [{
-		  "type": 0,
-		  "platform": "facebook",
-		  "speech": name
-		},	
-		{
-		  "type": 0,
-		  "speech": ""
-		}]
+	let message = {
+		"attachment":{
+			"type":"template",
+			"payload":{
+			  "template_type":"generic",
+			  "elements": [{
+				"title":name,
+				"image_url": "https://bot.peters-hats.com/img/hats/fez.jpg",
+				"subtitle": "Welcome to Demobot"				
+			  }]
+			}
+		}
 	};
 	MessengerExtensions.beginShareFlow(function(share_response) {
 	  // User dismissed without error, but did they share the message?
