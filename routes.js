@@ -63,7 +63,7 @@ openLoginWebView = function(){
                   "buttons": [
                     {
                       "type": "web_url",
-                      "url": "https://desolate-beach-84758.herokuapp.com/login.html",
+                      "url": "https://www.gmail.com",
                       "title": "Login",
                       "webview_height_ratio": "tall",
                       "messenger_extensions": "true"
