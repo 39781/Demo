@@ -2,7 +2,7 @@ var express 		= require('express');
 var router			= express.Router();	 
 var DialogflowApp	=	require('actions-on-google').DialogflowApp;
 const {OAuth2Client} = require('google-auth-library');
-const client = new OAuth2Client('93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com');
+
 //client id = 93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com
 //secret = 5_m-HkHU6_V1HnXMNL7R2WJ7
 //let botResponses = require('./google');		
@@ -16,20 +16,24 @@ router.get('/',function(req, res){
 
 
 
-function verify() {
+function verify(token) {
 	console.log('verify calling');
 	return new Promise(function(resolve, reject){
-	  const ticket = client.verifyIdToken({
+	  const client = new OAuth2Client('93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com');
+	  client.verifyIdToken({
 		  idToken: token,
 		  audience: '93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com',  
-	  });
-	  const payload = ticket.getPayload();
-	  const userid = payload['sub'];
-	  if(payload['iss']=='https://accounts.google.com'&&payload['aud']=='93244704256-87ndn70r1edcqr4c0jmjkdivqua4heg5.apps.googleusercontent.com'&&payload['email_verified']){
-		  resolve({name:payload['name'],userId : payload['sub'],userValid:true});
-	  }else{
-		  resolve({name:payload['name'],userId : payload['sub'],userValid:false});
-	  }		  
+	  },function(e, ticket){
+		   const payload = ticket.getPayload();
+		  const userid = payload['sub'];
+		  console.log(payload);
+		  if(payload['iss']=='accounts.google.com'&&payload['aud']=='93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com'&&payload['email_verified']){
+			  resolve({name:payload['name'],userId : payload['sub'],userValid:true});
+		  }else{
+			  resolve({name:payload['name'],userId : payload['sub'],userValid:false});
+		  }	
+	  });	  
+	 	  
 	});
 }
 
@@ -37,10 +41,12 @@ router.get('/validateUser/:accessToken',function(req,res){
 	console.log(req.params.accessToken);
 	verify(req.params.accessToken)
 	.then((resp)=>{		
+		console.log(resp);
 		res.status(200);
 		res.json(resp).end();
 	})
-	.catch((err)=>{		
+	.catch((err)=>{
+		console.log(err);		
 		res.status(400);
 		res.json(err).end();
 	});	
