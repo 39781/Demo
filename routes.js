@@ -28,6 +28,7 @@ router.post('/botHandler',function(req, res){
 			console.log(JSON.stringify(resp));
 			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.messenger.com');
 			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.facebook.com');
+			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.gmail.com');
 			res.json(resp).end();
 		}else{			
 			if(requestSource == 'google'){
