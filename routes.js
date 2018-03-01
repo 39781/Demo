@@ -67,7 +67,7 @@ router.post('/validateUser',function(req, res){
 });
 function sendMessageToBot(){
 	var queryParams = {};
-	var messageToSend = {			
+	/*var messageToSend = {			
 			"speech": "",								
 			"messages": [{
 			  "type": 0,
@@ -78,7 +78,20 @@ function sendMessageToBot(){
 			  "type": 0,
 			  "speech": ""
 			}]
-		};
+		};*/
+		var messageToSend = {
+		"attachment":{
+			"type":"template",
+			"payload":{
+			  "template_type":"generic",
+			  "elements": [{
+				"title":'login sucess',
+				"image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
+				"subtitle": "Welcome to Demobot"				
+			  }]
+			}
+		}
+	}
 	const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;	
 	const query = Object.assign({access_token: PAGE_ACCESS_TOKEN}, queryParams);	
 	request({
