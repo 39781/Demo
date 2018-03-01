@@ -79,7 +79,8 @@ function sendMessageToBot(){
 			  "speech": ""
 			}]
 		};
-	const query = Object.assign({access_token: PAGE_ACCESS_TOKEN}, queryParams);
+	const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;	
+	const query = Object.assign({access_token: PAGE_ACCESS_TOKEN}, queryParams);	
 	request({
     uri: `https://graph.facebook.com/v2.6/me/messages`,
     qs: query,
