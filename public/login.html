@@ -34,7 +34,7 @@ function onSignIn(googleUser) {
 	xhr.onreadystatechange = function() {
 		console.log(this.readyState);
 		if (this.readyState == 4 && this.status == 200) {			
-			window.location.href = findGetParameter(redirect_uri);
+			window.location.href = findGetParameter('redirect_uri');
 			document.getElementById("status").innerHTML = "user validated : login success";
 			return webViewClose(profile.getName());		   
 		}else{
