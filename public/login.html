@@ -35,7 +35,8 @@ function onSignIn(googleUser) {
 	xhr.onreadystatechange = function() {
 		console.log(this.readyState);
 		if (this.readyState == 4 && this.status == 200) {			
-			 findGetParameter('redirect_uri');+'&authorization_code=12344';
+			window.close();
+			// findGetParameter('redirect_uri');+'&authorization_code=12344';
 			document.getElementById("status").innerHTML = "user validated : login success";
 			return webViewClose(profile.getName());		   
 		}else{

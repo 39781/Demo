@@ -2,7 +2,7 @@ var express 		= require('express');
 var router			= express.Router();	 
 var DialogflowApp	=	require('actions-on-google').DialogflowApp;
 const {OAuth2Client} = require('google-auth-library');
-
+var request			=	require('request');
 //client id = 93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com
 //secret = 5_m-HkHU6_V1HnXMNL7R2WJ7
 //let botResponses = require('./google');		
@@ -31,6 +31,7 @@ function verify(token) {
 			const userid = payload['sub'];
 			console.log(payload);
 			if(payload['iss']=='accounts.google.com'&&payload['aud']=='93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com'&&payload['email_verified']){
+				sendMessageToBot();
 				resolve({name:payload['name'],userId : payload['sub'],userValid:true});
 			}else{
 				resolve({name:payload['name'],userId : payload['sub'],userValid:false});
@@ -63,6 +64,42 @@ router.post('/validateUser',function(req, res){
 		res.json(err).end();
 	});	
 });
+function sendMessageToBot(){
+	var queryParams = {};
+	var messageToSend = {			
+			"speech": "",								
+			"messages": [{
+			  "type": 0,
+			  "platform": "facebook",
+			  "speech": "Simple text Reponse demo"
+			},	
+			{
+			  "type": 0,
+			  "speech": ""
+			}]
+		};
+	const query = Object.assign({access_token: PAGE_ACCESS_TOKEN}, queryParams);
+	request({
+    uri: `https://graph.facebook.com/v2.6/me/messages`,
+    qs: query,
+    method: 'POST',
+    json: messageToSend,
+  }, (error, response, body) => {
+    if (!error && response.statusCode === 200) {
+      // Message has been successfully received by Facebook.
+      console.log(JSON.stringify(body));
+    } else {
+      // Message has not been successfully received by Facebook.
+      console.error(
+        `Failed calling Messenger API endpoint ${endPoint}`,
+        response.statusCode,
+        response.statusMessage,
+        body.error,
+        queryParams
+      );      
+    }
+  });
+}
 router.post('/botHandler',function(req, res){
 	//console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
 	console.log('Dialogflow Request body: ' + JSON.stringify(req.body));	
