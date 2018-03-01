@@ -103,10 +103,10 @@ function sendMessageToBot(){
     if (!error && response.statusCode === 200) {
       // Message has been successfully received by Facebook.
       console.log(JSON.stringify(body));
-    } else {
+    } else {		
       // Message has not been successfully received by Facebook.
       console.error(
-        `Failed calling Messenger API endpoint ${endPoint}`,
+        `Failed calling Messenger API endpoint`,
         response.statusCode,
         response.statusMessage,
         body.error,
