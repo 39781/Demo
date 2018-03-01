@@ -16,7 +16,7 @@ router.get('/',function(req, res){
 
 
 
-function verify(token) {
+function verify(token, recipientId) {
 	console.log('verify calling');
 	return new Promise(function(resolve, reject){
 	  const client = new OAuth2Client('93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com');
@@ -32,7 +32,7 @@ function verify(token) {
 			const userid = payload['sub'];
 			console.log(payload);
 			if(payload['iss']=='accounts.google.com'&&payload['aud']=='93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com'&&payload['email_verified']){
-				sendMessageToBot();
+				sendMessageToBot(recipientId);
 				resolve({name:payload['name'],userId : payload['sub'],userValid:true});
 			}else{
 				resolve({name:payload['name'],userId : payload['sub'],userValid:false});
@@ -49,7 +49,7 @@ router.get('/test',function(req,res){
 })
 router.post('/validateUser',function(req, res){
 	console.log(req.body.accessToken);
-	verify(req.body.accessToken)
+	verify(req.body.accessToken, req.body.recipientId)
 	.then((resp)=>{		
 		console.log(resp);
 		if(resp.userValid){
@@ -65,7 +65,7 @@ router.post('/validateUser',function(req, res){
 		res.json(err).end();
 	});	
 });
-function sendMessageToBot(){
+function sendMessageToBot(recipientId){
 	var queryParams = {};
 	/*var messageToSend = {			
 			"speech": "",								
@@ -80,18 +80,24 @@ function sendMessageToBot(){
 			}]
 		};*/
 		var messageToSend = {
-		"attachment":{
-			"type":"template",
-			"payload":{
-			  "template_type":"generic",
-			  "elements": [{
-				"title":'login sucess',
-				"image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
-				"subtitle": "Welcome to Demobot"				
-			  }]
-			}
-		}
-	}
+			recipient: {
+			  id: recipientId,
+			},
+			message: {
+				"attachment":{
+					"type":"template",
+					"payload":{
+					  "template_type":"generic",
+					  "elements": [{
+						"title":'login sucess',
+						"image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
+						"subtitle": "Welcome to Demobot"				
+					  }]
+					}
+				}
+			},
+		  }
+		
 	const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;	
 	const query = Object.assign({access_token: PAGE_ACCESS_TOKEN}, queryParams);	
 	request({
@@ -126,8 +132,9 @@ router.post('/botHandler',function(req, res){
 		var sessionId = (req.body.sessionId)?req.body.sessionId:'';
 		var resolvedQuery = req.body.result.resolvedQuery;	
 		let botResponses = require('./'+requestSource);		
+		let senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
 		if(action.toLowerCase() == 'demo'){			
-			let resp = openLoginWebView();
+			let resp = openLoginWebView(senderId);
 			console.log(JSON.stringify(resp));
 			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.messenger.com');
 			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.facebook.com');
@@ -152,7 +159,7 @@ router.post('/botHandler',function(req, res){
 		}
 		
 });
-openLoginWebView = function(){
+openLoginWebView = function(senderId){
 	return {
       "speech": "",
       "messages": [
@@ -169,7 +176,7 @@ openLoginWebView = function(){
                   "buttons": [
                     {
                       "type": "account_link",
-                      "url": "https://desolate-beach-84758.herokuapp.com/login.html"
+                      "url": "https://desolate-beach-84758.herokuapp.com/login.html"+(senderId)?"rid="+senderId:'';
                       //"title": "Login",
                       //"webview_height_ratio": "tall",
                       //"messenger_extensions": "true"

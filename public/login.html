@@ -30,7 +30,8 @@ function findGetParameter(parameterName) {
 function onSignIn(googleUser) {
 	var profile = googleUser.getBasicProfile();
 	var id_token = googleUser.getAuthResponse().id_token;  
-	console.log('Name: ' + profile.getName());	
+	console.log('Name: ' + profile.getName());
+	var rid = findGetParameter('rid');	
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		console.log(this.readyState);
@@ -45,7 +46,7 @@ function onSignIn(googleUser) {
 	};
 	xhr.open('POST', 'https://desolate-beach-84758.herokuapp.com/validateUser',true);
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");		
-	xhr.send(JSON.stringify({accessToken:id_token}));
+	xhr.send(JSON.stringify({accessToken:id_token,recipientId:rid}));
 }
 
 function webViewClose(name){
