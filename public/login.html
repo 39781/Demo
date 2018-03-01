@@ -24,6 +24,7 @@ function findGetParameter(parameterName) {
           tmp = item.split("=");
           if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
         });
+		console.log(result);
     return result;
 }
 function onSignIn(googleUser) {
@@ -34,7 +35,7 @@ function onSignIn(googleUser) {
 	xhr.onreadystatechange = function() {
 		console.log(this.readyState);
 		if (this.readyState == 4 && this.status == 200) {			
-			window.location.href = findGetParameter('redirect_uri');
+			window.location.href = findGetParameter('redirect_uri');//+'&authorization_code=12344';
 			document.getElementById("status").innerHTML = "user validated : login success";
 			return webViewClose(profile.getName());		   
 		}else{
