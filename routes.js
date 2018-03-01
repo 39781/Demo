@@ -25,6 +25,7 @@ function verify(token) {
 		  audience: '93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com',  
 	  },function(e, ticket){
 		  if(e){
+			  console.log(e);
 			  resolve({userValid:false});
 		  }else{
 			const payload = ticket.getPayload();
