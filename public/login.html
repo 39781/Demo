@@ -49,42 +49,14 @@ function onSignIn(googleUser) {
 	xhr.send(JSON.stringify({accessToken:id_token,recipientId:rid}));
 }
 
-function webViewClose(name){
-	let message = {
-		"attachment":{
-			"type":"template",
-			"payload":{
-			  "template_type":"generic",
-			  "elements": [{
-				"title":name,
-				"image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
-				"subtitle": "Welcome to Demobot"				
-			  }]
-			}
-		}
-	};
-	MessengerExtensions.beginShareFlow(function(share_response) {
-	  // User dismissed without error, but did they share the message?
-	  if(share_response.is_sent){
-		MessengerExtensions.requestCloseBrowser(function success() {
-		
-		}, function error(err) {
-		  // an error occurred
-		});
-	  }
-	}, 
-	function(errorCode, errorMessage) {      
-	// An error occurred in the process
 
-	},
-	message,
-	"current_thread");	
-}
 </script>
 
 </head>
 <body>
-<div class="g-signin2" data-onsuccess="onSignIn"></div>
+<div class="g-signin2" data-longtitle="true"></div>
+
+
 <div id="status"></div>
 </body>
 </html>
