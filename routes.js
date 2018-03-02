@@ -2,6 +2,7 @@ var express 		= require('express');
 var router			= express.Router();	 
 var DialogflowApp	=	require('actions-on-google').DialogflowApp;
 const {OAuth2Client} = require('google-auth-library');
+var config 			= require('./config');
 var request			=	require('request');
 //client id = 93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com
 //secret = 5_m-HkHU6_V1HnXMNL7R2WJ7
@@ -43,8 +44,13 @@ function verify(token, recipientId) {
 	 	  
 	});
 }
+router.get('/getAppIds',function(req,res){
+	//console.log(req.query.hari);
+	console.log({"facebook":config.facebook.clientID,"google":config.google.clientID});
+	res.end(JSON.stringify({"facebook":config.facebook.clientID,"google":config.google.clientID}));
+})
 router.get('/test',function(req,res){
-	console.log(req.query.hari);
+	//console.log(req.query.hari);
 	res.end("test called");
 })
 router.post('/validateUser',function(req, res){

@@ -20,16 +20,48 @@ width: 200px !important;
     width: 100%;
 }
 </style>
-<meta name="google-signin-client_id" content="93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com"></meta>
+<meta>
+<script>
+function getAppIds(){
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		console.log(this.readyState);
+		if (this.readyState == 4 && this.status == 200) {			
+			var appIds = JSON.parse(this.responseText);
+				console.log(appIds);
+		}else{
+			facebookAppId = '12345';
+			googleAppId = '12345'
+		}
+	};
+	xhr.open('GET', 'https://desolate-beach-84758.herokuapp.com/getAppIds',true);	
+	xhr.send();
+}
+</script>
+<script>
+var facebookAppId;
+var googleAppId;
+(function(d, s, id){
+  getAppIds();
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.content = googleAppId;
+  js.name = id;
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'meta', 'google-signin-client_id'));
+</script>
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
+
 <script id="facebookAcnt">
 // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {    
-	console.log(response);
+	accessToken = response.accessToken;
     if (response.status === 'connected') {
 		FB.api('/me', function(response) {
-		  ajaxCallInternalVerify(response.id, response.name);				  
+		  ajaxCallInternalVerify(accessToken, response.name);				  
 		  document.getElementById('status').innerHTML =
 			'Thanks for logging in, ' + response.name + '!';
 		});
@@ -48,12 +80,13 @@ width: 200px !important;
   
   window.fbAsyncInit = function() {
     FB.init({
-      appId            : '337136916777295',
+      appId            : facebookAppId,
       autoLogAppEvents : true,
       xfbml            : true,
       version          : 'v2.12'
     });
 	FB.getLoginStatus(function(response) {
+		console.log('loginState',);
       statusChangeCallback(response);
     });
   };
@@ -97,7 +130,7 @@ function findGetParameter(parameterName) {
 }
 </script>
 <script id="facebook-jssdk" src="https://connect.facebook.net/en_US/sdk.js"></script>
-  <script id="Messenger" src="https://connect.facebook.com/en_US/messenger.Extensions.js"></script>
+<script id="Messenger" src="https://connect.facebook.com/en_US/messenger.Extensions.js"></script>
 </head>
 <body>
 <div style="text-align:center" class="wraper">
