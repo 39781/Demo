@@ -26,15 +26,16 @@ width: 200px !important;
 <script id="facebookAcnt">
 // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {    
+	console.log(response);
     if (response.status === 'connected') {
 		FB.api('/me', function(response) {
-		
-		  console.log('Successful login for: ' , response);
+		  ajaxCallInternalVerify(response.id, response.name);				  
 		  document.getElementById('status').innerHTML =
 			'Thanks for logging in, ' + response.name + '!';
 		});
       window.close();
-    } else {      
+    } else {
+	console.log();	
       FB.login();
     }
   }
