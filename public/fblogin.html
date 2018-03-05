@@ -29,6 +29,8 @@ function getAppIds(){
 		if (this.readyState == 4 && this.status == 200) {			
 			var appIds = JSON.parse(this.responseText);
 				console.log(appIds);
+				facebookAppId = appIds.facebook;
+				googleAppId = appIds.google;
 		}else{
 			facebookAppId = '12345';
 			googleAppId = '12345'
@@ -78,7 +80,7 @@ var googleAppId;
     });
   }
   
-  window.fbAsyncInit = function() {
+  window.fbAsyncInit = function() {  
     FB.init({
       appId            : facebookAppId,
       autoLogAppEvents : true,
