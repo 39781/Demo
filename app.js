@@ -6,7 +6,8 @@ var port = process.env.PORT || 3000;
 var passport =	require('passport');
 
 require('./auth/passport')(passport);
-app.use(session({ secret: 'this-is-a-secret-token',resave: true, saveUninitialized: true, cookie: { maxAge: 60000 }}));
+var mstore = new express.session.MemoryStore;
+app.use(session({ store:mstore, secret: 'this-is-a-secret-token',resave: true, saveUninitialized: true, cookie: { maxAge: 60000 }}));
 //global.recentInput = "";
 app.use(bodyParser.urlencoded({ extended: false })) 
 app.use(bodyParser.json());
