@@ -22,7 +22,7 @@ module.exports = function(router, passport){
 
 	router.get('/auth/facebook/callback',
 		passport.authenticate('facebook', {
-			successRedirect : '/sendResponseToBot?src=facebook'',
+			successRedirect : '/sendResponseToBot?src=facebook',
 			failureRedirect : '/'
 	}));	
 	router.get('/auth/google/callback',
