@@ -78,25 +78,23 @@ module.exports = function(passport) {
     function(token, refreshToken, profile, done) {
 		console.log(profile);
         // make the code asynchronous
-        // User.findOne won't fire until we have all our data back from Google
-        process.nextTick(function() {
-           if(!User.google[profile.id]){			
-				User.google[profile.id] = {
-					id:profile.id,
-					token:token,
-					name : profile.displayName
+        // User.findOne won't fire until we have all our data back from Google        
+	   if(!User.google[profile.id]){			
+			User.google[profile.id] = {
+				id:profile.id,
+				token:token,
+				name : profile.displayName
+			}
+			console.log(User);
+			fs.writeFile('users/users.json',JSON.stringify(User),function(err,data){
+				if(err){
+					console.log(err);
+				}else{
+					console.log('User added');
 				}
-				console.log(User);
-				fs.writeFile('users/users.json',JSON.stringify(User),function(err,data){
-					if(err){
-						console.log(err);
-					}else{
-						console.log('User added');
-					}
-				});
-			} 
-			return done(null, User.google[profile.Id]);
-        });
+			});
+		} 
+		return done(null, User.google[profile.Id]);        
 
     }));
 };
