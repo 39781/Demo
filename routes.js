@@ -53,7 +53,8 @@ module.exports = function(router, passport){
 			var sessionId = (req.body.sessionId)?req.body.sessionId:'';
 			var resolvedQuery = req.body.result.resolvedQuery;	
 			let botResponses = require('./'+requestSource);		
-			ssn.save();
+			ssn.senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
+			 ssn.save();
 			console.log('senderid',ssn.senderId,req.session);
 			if(action.toLowerCase() == 'demo'){			
 				let resp = openLoginWebView(ssn.senderId);
