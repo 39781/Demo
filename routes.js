@@ -11,8 +11,8 @@ module.exports = function(router, passport){
 	});
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
 		console.log('sendresponsebot',req.user);
-		console.log('req senderid',req.session.senderId, req.session);
-		sendMessageToBot(req.user,req.cookie.appSenderId);
+		console.log('req senderid',req.cookies);
+		sendMessageToBot(req.user,req.cookies.appSenderId);
 		res.sendFile(path.resolve('./public/closeWindow.html'));
 	})
 	router.get('/auth/facebook', passport.authenticate('facebook', { 
