@@ -44,7 +44,7 @@ module.exports = function(router, passport){
 
 	router.post('/botHandler',function(req, res){
 		//console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
-			var ssn = req.session;
+			var ssn = req.session.passport;
 			
 			let requestSource = (req.body.originalRequest) ? req.body.originalRequest.source : undefined;	
 			console.log(requestSource);
