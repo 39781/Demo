@@ -12,7 +12,7 @@ module.exports = function(router, passport){
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
 		console.log('sendresponsebot',req.user);
 		console.log('req senderid',req.session.senderId, req.session);
-		sendMessageToBot(req.user,req.session.senderId);
+		sendMessageToBot(req.user,req.cookie.appSenderId);
 		res.sendFile(path.resolve('./public/closeWindow.html'));
 	})
 	router.get('/auth/facebook', passport.authenticate('facebook', { 
@@ -44,7 +44,7 @@ module.exports = function(router, passport){
 
 	router.post('/botHandler',function(req, res){
 		//console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
-			var ssn = req.session;
+			
 			
 			let requestSource = (req.body.originalRequest) ? req.body.originalRequest.source : undefined;	
 			console.log(requestSource);
@@ -53,11 +53,11 @@ module.exports = function(router, passport){
 			var sessionId = (req.body.sessionId)?req.body.sessionId:'';
 			var resolvedQuery = req.body.result.resolvedQuery;	
 			let botResponses = require('./'+requestSource);		
-			ssn.senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
-			 ssn.save();
-			console.log('senderid',ssn.senderId,req.session);
+			let senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
+			res.cookie('appSenderId',senderId, { maxAge: 900000, httpOnly: true });
+			console.log('senderid',senderId);
 			if(action.toLowerCase() == 'demo'){			
-				let resp = openLoginWebView(ssn.senderId);
+				let resp = openLoginWebView(senderId);
 				console.log(JSON.stringify(resp));
 				res.setHeader('X-Frame-Options','ALLOW-FROM https://www.messenger.com');
 				res.setHeader('X-Frame-Options','ALLOW-FROM https://www.facebook.com');
