@@ -10,13 +10,9 @@ module.exports = function(router, passport){
 		console.log('login failed');
 		res.sendFile(path.resolve('./public/login.html')); // load the index.ejs file
 	});
-	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
-		console.log(req.headers.referer);
-		var url_parts = url.parse(req.headers.referer, true);
-		var query = url_parts.query;
-		console.log('sendresponsebot',req.user);
-		console.log('req senderid',req.cookies);
-		sendMessageToBot(req.user,req.cookies.appSenderId);
+	router.get('/sendResponseToBot',isLoggedIn, function(req, res){		
+		var queryParam = url.parse(req.headers.referer, true);
+		sendMessageToBot(req.user,queryParam.query['rid']);
 		res.sendFile(path.resolve('./public/closeWindow.html'));
 	})
 	router.get('/auth/facebook', passport.authenticate('facebook', { 
