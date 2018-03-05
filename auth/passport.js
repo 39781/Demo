@@ -46,25 +46,28 @@ module.exports = function(passport) {
     // facebook will send back the token and profile
     function(token, refreshToken, profile, done) {
         // asynchronous
-        process.nextTick(function() {
-			if(!User.facebook[profile.id]){				
-				User.facebook[profile.id] = {
-					id:profile.id,
-					token:token,
-					name : profile.displayName
-				}
-				console.log(User);
-				fs.writeFile('users/users.json',JSON.stringify(User),function(err){
-					if(err){
-						console.log(err);
-					}else{
-						console.log('User added');						
+		if(profile){	
+			process.nextTick(function() {
+				if(!User.facebook[profile.id]){				
+					User.facebook[profile.id] = {
+						id:profile.id,
+						token:token,
+						name : profile.displayName
 					}
-				});				
-			}      
-			return done(null, User.facebook[profile.Id]);			
-        });
-
+					console.log(User);
+					fs.writeFile('users/users.json',JSON.stringify(User),function(err){
+						if(err){
+							console.log(err);
+						}else{
+							console.log('User added');						
+						}
+					});				
+				}      
+				return done(null, User.facebook[profile.Id]);			
+			});
+		}else{
+			return done(err, {});        
+		}
     }));
 
 	
@@ -76,23 +79,28 @@ module.exports = function(passport) {
     function(token, refreshToken, profile, done) {
 		console.log(profile);
         // make the code asynchronous
-        // User.findOne won't fire until we have all our data back from Google        
-	   if(!User.google[profile.id]){			
-			User.google[profile.id] = {
-				id:profile.id,
-				token:token,
-				name : profile.displayName
-			}
-			console.log(User);
-			fs.writeFile('users/users.json',JSON.stringify(User),function(err,data){
-				if(err){
-					console.log(err);
-				}else{
-					console.log('User added');
-				}
-			});
-		} 
-		return done(null, User.google[profile.Id]);        
-
+        // User.findOne won't fire until we have all our data back from Google   
+		if(profile){	
+			process.nextTick(function() {
+			   if(!User.google[profile.id]){			
+					User.google[profile.id] = {
+						id:profile.id,
+						token:token,
+						name : profile.displayName
+					}
+					console.log(User);
+					fs.writeFile('users/users.json',JSON.stringify(User),function(err,data){
+						if(err){
+							console.log(err);
+						}else{
+							console.log('User added');
+						}
+					});
+				} 
+				return done(null, User.google[profile.Id]);        
+			})
+		}else{
+			return done(err, {});        
+		}
     }));
 };
