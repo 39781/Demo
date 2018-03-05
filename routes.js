@@ -9,7 +9,7 @@ module.exports = function(router, passport){
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
 		console.log(req.user);
 		sendMessageToBot(req.user);
-		res.sendFile(path.reslove('.public/closeWindow.html'));
+		res.sendFile(path.reslove('./public/closeWindow.html'));
 	})
 	router.get('/auth/facebook', passport.authenticate('facebook', { 
 		  scope : ['public_profile', 'email']
