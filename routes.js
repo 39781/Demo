@@ -10,7 +10,7 @@ module.exports = function(router, passport){
 		res.sendFile(path.resolve('./public/login.html')); // load the index.ejs file
 	});
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
-		console.log(req.user);
+		console.log('sendresponsebot',req.user);
 		sendMessageToBot(req.user);
 		res.sendFile(path.reslove('./public/closeWindow.html'));
 	})
@@ -25,10 +25,11 @@ module.exports = function(router, passport){
 	}));	
 	router.get('/auth/google/callback',
 		passport.authenticate('google', {			
-			successRedirect : '/sendResponseToBot',
-			failureRedirect : '/'
-			
-	}));	
+			//successRedirect : '/sendResponseToBot',
+			failureRedirect : '/'			
+	}),function(req, res) {
+		res.redirect('/sendResponseToBot');
+	});	
 	router.get('/logout', function(req, res) {
 		req.logout();
 		res.redirect('/');
