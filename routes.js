@@ -11,7 +11,7 @@ module.exports = function(router, passport){
 	});
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
 		console.log('sendresponsebot',req.user);
-		sendMessageToBot(req.user);
+		sendMessageToBot(req.user,req,session.senderId);
 		res.sendFile(path.resolve('./public/closeWindow.html'));
 	})
 	router.get('/auth/facebook', passport.authenticate('facebook', { 
@@ -21,15 +21,13 @@ module.exports = function(router, passport){
 	router.get('/auth/facebook/callback',
 		passport.authenticate('facebook', {
 			successRedirect : '/sendResponseToBot',
-			failureRedirect : '/loginFailed'
+			failureRedirect : '/'
 	}));	
 	router.get('/auth/google/callback',
 		passport.authenticate('google', {			
-			//successRedirect : '/sendResponseToBot',
-			failureRedirect : '/loginFailed'			
-	}),function(req, res) {
-		res.redirect('/sendResponseToBot');
-	});	
+			successRedirect : '/sendResponseToBot',
+			failureRedirect : '/'			
+	}));	
 	router.get('/logout', function(req, res) {
 		req.logout();
 		res.redirect('/');
@@ -46,7 +44,7 @@ module.exports = function(router, passport){
 	router.post('/botHandler',function(req, res){
 		//console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
 		
-		
+			
 			let requestSource = (req.body.originalRequest) ? req.body.originalRequest.source : undefined;	
 			console.log(requestSource);
 			let action = req.body.result.action; // https://dialogflow.com/docs/actions-and-parameters			
@@ -55,6 +53,7 @@ module.exports = function(router, passport){
 			var resolvedQuery = req.body.result.resolvedQuery;	
 			let botResponses = require('./'+requestSource);		
 			let senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
+			req.session.senderId = senderId;
 			if(action.toLowerCase() == 'demo'){			
 				let resp = openLoginWebView(senderId);
 				console.log(JSON.stringify(resp));
@@ -126,7 +125,7 @@ function verify(token, recipientId) {
 
 
 
-function sendMessageToBot(recipientId){
+function sendMessageToBot(user, recipientId){
 	var queryParams = {};
 	/*var messageToSend = {			
 			"speech": "",								
@@ -152,7 +151,7 @@ function sendMessageToBot(recipientId){
 					  "elements": [{
 						"title":'login sucess',
 						"image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
-						"subtitle": "Welcome to Demobot"				
+						"subtitle": "Welcome to Demobot, Mr/Mrs/Miss."+user.name				
 					  }]
 					}
 				}
