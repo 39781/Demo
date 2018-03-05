@@ -1,6 +1,7 @@
 var DialogflowApp	=	require('actions-on-google').DialogflowApp;
 var request			=	require('request');
 var path 			=	require('path');	
+var url				=	require('url');
 module.exports = function(router, passport){
 	router.get('/', function(req, res) {
 		res.sendFile(path.resolve('./public/login.html')); // load the index.ejs file
@@ -10,7 +11,9 @@ module.exports = function(router, passport){
 		res.sendFile(path.resolve('./public/login.html')); // load the index.ejs file
 	});
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
-		console.log(req);
+		console.log(req.headers.referer);
+		var url_parts = url.parse(req.headers.referer, true);
+		var query = url_parts.query;
 		console.log('sendresponsebot',req.user);
 		console.log('req senderid',req.cookies);
 		sendMessageToBot(req.user,req.cookies.appSenderId);
