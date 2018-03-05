@@ -12,7 +12,7 @@ module.exports = function(router, passport){
 	});
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){		
 		var queryParam = url.parse(req.headers.referer, true);
-		console.log(req.user,'user info');
+		console.log(req.params,req.query,req.user,'user info');
 		sendMessageToBot(req.user,queryParam.query['rid']);
 		res.sendFile(path.resolve('./public/closeWindow.html'));
 	})
@@ -22,12 +22,12 @@ module.exports = function(router, passport){
 
 	router.get('/auth/facebook/callback',
 		passport.authenticate('facebook', {
-			successRedirect : '/sendResponseToBot',
+			successRedirect : '/sendResponseToBot?src=facebook'',
 			failureRedirect : '/'
 	}));	
 	router.get('/auth/google/callback',
 		passport.authenticate('google', {			
-			successRedirect : '/sendResponseToBot',
+			successRedirect : '/sendResponseToBot?src=google',
 			failureRedirect : '/'			
 	}));	
 	router.get('/logout', function(req, res) {
