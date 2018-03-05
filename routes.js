@@ -21,7 +21,7 @@ module.exports = function(router, passport){
 	router.get('/auth/facebook/callback',
 		passport.authenticate('facebook', {
 			successRedirect : '/sendResponseToBot',
-			failureRedirect : '/'
+			failureRedirect : '/loginFailed'
 	}));	
 	router.get('/auth/google/callback',
 		passport.authenticate('google', {			
