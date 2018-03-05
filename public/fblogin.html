@@ -25,13 +25,14 @@ width: 200px !important;
 function getAppIds(){
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
-		console.log(this.readyState);
+		console.log(this.readyState, this.status);
 		if (this.readyState == 4 && this.status == 200) {			
 			var appIds = JSON.parse(this.responseText);
 				console.log(appIds);
 				facebookAppId = appIds.facebook;
 				googleAppId = appIds.google;
 		}else{
+			console.log('app ids not there');
 			facebookAppId = '12345';
 			googleAppId = '12345'
 		}
@@ -80,7 +81,8 @@ var googleAppId;
     });
   }
   
-  window.fbAsyncInit = function() {  
+  window.fbAsyncInit = function() {
+console.log(facebookAppId);  
     FB.init({
       appId            : facebookAppId,
       autoLogAppEvents : true,
