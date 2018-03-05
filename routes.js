@@ -11,6 +11,7 @@ module.exports = function(router, passport){
 	});
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
 		console.log('sendresponsebot',req.user);
+		console.log('req senderid',req.session.senderId);
 		sendMessageToBot(req.user,req.session.senderId);
 		res.sendFile(path.resolve('./public/closeWindow.html'));
 	})
@@ -54,6 +55,7 @@ module.exports = function(router, passport){
 			let botResponses = require('./'+requestSource);		
 			let senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
 			req.session.senderId = senderId;
+			console.log('senderid',senderId);
 			if(action.toLowerCase() == 'demo'){			
 				let resp = openLoginWebView(senderId);
 				console.log(JSON.stringify(resp));
