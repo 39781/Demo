@@ -72,6 +72,7 @@ module.exports = function(passport) {
         clientID        : configAuth.google.clientID,
         clientSecret    : configAuth.google.clientSecret,
         callbackURL     : configAuth.google.callbackURL,
+		passReqToCallback   : true
 
     },
     function(token, refreshToken, profile, done) {
