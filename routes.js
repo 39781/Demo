@@ -55,9 +55,9 @@ module.exports = function(router, passport){
 			let botResponses = require('./'+requestSource);		
 			ssn.senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
 			 
-			console.log('senderid',ssn.senderId);
+			console.log('senderid',ssn.senderId,req.session);
 			if(action.toLowerCase() == 'demo'){			
-				let resp = openLoginWebView(senderId);
+				let resp = openLoginWebView(ssn.senderId);
 				console.log(JSON.stringify(resp));
 				res.setHeader('X-Frame-Options','ALLOW-FROM https://www.messenger.com');
 				res.setHeader('X-Frame-Options','ALLOW-FROM https://www.facebook.com');
