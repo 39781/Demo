@@ -1,20 +1,93 @@
-var express 		= require('express');
-var router			= express.Router();	 
 var DialogflowApp	=	require('actions-on-google').DialogflowApp;
-const {OAuth2Client} = require('google-auth-library');
-var config 			= require('./config');
 var request			=	require('request');
-//client id = 93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com
-//secret = 5_m-HkHU6_V1HnXMNL7R2WJ7
-//let botResponses = require('./google');		
-//let botResponses = require('./facebook');		
-//let botResponses = require('./slack');		
-router.get('/',function(req, res){
-	console.log('req received');
-	res.send("req received");
-	res.end();
-})
+	
+module.exports = function(router, passport){
+	router.get('/', function(req, res) {
+		res.render('login.html'); // load the index.ejs file
+	});
 
+	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
+		console.log(req.user);
+		sendMessageToBot(req.user);
+		res.render('closeWindow.html');
+	})
+	router.get('/auth/facebook', passport.authenticate('facebook', { 
+		  scope : ['public_profile', 'email']
+	}));
+
+	router.get('/auth/callback',
+		passport.authenticate('facebook', {
+			successRedirect : '/sendResponseToBot',
+			failureRedirect : '/'
+	}));	
+
+	router.get('/logout', function(req, res) {
+		req.logout();
+		res.redirect('/');
+	});
+
+	router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+
+	router.get('/auth/callback',passport.authenticate('google', {
+			successRedirect : '/sendResponseToBot',
+			failureRedirect : '/'
+		})
+	);
+
+	router.get('/test',function(req,res){
+		//console.log(req.query.hari);
+		res.end("test called");
+	})
+
+	router.post('/botHandler',function(req, res){
+		//console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
+		console.log('Dialogflow Request body: ' + JSON.stringify(req.body));	
+		
+			let requestSource = (req.body.originalRequest) ? req.body.originalRequest.source : undefined;	
+			console.log(requestSource);
+			let action = req.body.result.action; // https://dialogflow.com/docs/actions-and-parameters			
+			let inputContexts = req.body.result.contexts; // https://dialogflow.com/docs/contexts	
+			var sessionId = (req.body.sessionId)?req.body.sessionId:'';
+			var resolvedQuery = req.body.result.resolvedQuery;	
+			let botResponses = require('./'+requestSource);		
+			let senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
+			if(action.toLowerCase() == 'demo'){			
+				let resp = openLoginWebView(senderId);
+				console.log(JSON.stringify(resp));
+				res.setHeader('X-Frame-Options','ALLOW-FROM https://www.messenger.com');
+				res.setHeader('X-Frame-Options','ALLOW-FROM https://www.facebook.com');
+				res.setHeader('X-Frame-Options','ALLOW-FROM https://www.gmail.com');
+				res.json(resp).end();
+			}else{			
+				if(requestSource == 'google'){
+					let appHandler = new DialogflowApp({request: req, response: res});
+					googleAssitant(req.body.result.parameters['demotype'], botResponses, appHandler)
+					.then((resp)=>{console.log(resp);})
+					.catch((err)=>{console.log(err);})
+				}else{
+					getResponse(req.body.result.parameters['demotype'],botResponses)
+					.then((resp)=>{
+						console.log(resp);
+						res.json(resp).end();
+					})
+					.catch((err)=>{
+						res.json(err).end();
+					});
+				}
+			}
+			
+	});
+
+}
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}
 
 
 function verify(token, recipientId) {
@@ -44,33 +117,11 @@ function verify(token, recipientId) {
 	 	  
 	});
 }
-router.get('/getAppIds',function(req,res){
-	//console.log(req.query.hari);
-	console.log({"facebook":config.facebook.clientID,"google":config.google.clientID});
-	res.end(JSON.stringify({"facebook":config.facebook.clientID,"google":config.google.clientID}));
-})
-router.get('/test',function(req,res){
-	//console.log(req.query.hari);
-	res.end("test called");
-})
-router.post('/validateUser',function(req, res){
-	console.log(req.body.accessToken);
-	verify(req.body.accessToken, req.body.recipientId)
-	.then((resp)=>{		
-		console.log(resp);
-		if(resp.userValid){
-			res.status(200);
-		}else{
-			res.status(400);
-		}		
-		res.json(resp).end();
-	})
-	.catch((err)=>{
-		console.log(err);		
-		res.status(400);
-		res.json(err).end();
-	});	
-});
+
+
+
+
+
 function sendMessageToBot(recipientId){
 	var queryParams = {};
 	/*var messageToSend = {			
@@ -127,44 +178,7 @@ function sendMessageToBot(recipientId){
     }
   });
 }
-router.post('/botHandler',function(req, res){
-	//console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
-	console.log('Dialogflow Request body: ' + JSON.stringify(req.body));	
-	
-		let requestSource = (req.body.originalRequest) ? req.body.originalRequest.source : undefined;	
-		console.log(requestSource);
-		let action = req.body.result.action; // https://dialogflow.com/docs/actions-and-parameters			
-		let inputContexts = req.body.result.contexts; // https://dialogflow.com/docs/contexts	
-		var sessionId = (req.body.sessionId)?req.body.sessionId:'';
-		var resolvedQuery = req.body.result.resolvedQuery;	
-		let botResponses = require('./'+requestSource);		
-		let senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
-		if(action.toLowerCase() == 'demo'){			
-			let resp = openLoginWebView(senderId);
-			console.log(JSON.stringify(resp));
-			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.messenger.com');
-			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.facebook.com');
-			res.setHeader('X-Frame-Options','ALLOW-FROM https://www.gmail.com');
-			res.json(resp).end();
-		}else{			
-			if(requestSource == 'google'){
-				let appHandler = new DialogflowApp({request: req, response: res});
-				googleAssitant(req.body.result.parameters['demotype'], botResponses, appHandler)
-				.then((resp)=>{console.log(resp);})
-				.catch((err)=>{console.log(err);})
-			}else{
-				getResponse(req.body.result.parameters['demotype'],botResponses)
-				.then((resp)=>{
-					console.log(resp);
-					res.json(resp).end();
-				})
-				.catch((err)=>{
-					res.json(err).end();
-				});
-			}
-		}
-		
-});
+
 openLoginWebView = function(senderId){
 	return {
       "speech": "",
@@ -226,7 +240,7 @@ googleAssitant = function(demotype, botResponses,appHandler){
 	});
 }
 
-module.exports = router;
+
 
 
 
