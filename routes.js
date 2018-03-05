@@ -26,7 +26,7 @@ module.exports = function(router, passport){
 	router.get('/auth/google/callback',
 		passport.authenticate('google', {			
 			//successRedirect : '/sendResponseToBot',
-			failureRedirect : '/'			
+			failureRedirect : '/loginFailed'			
 	}),function(req, res) {
 		res.redirect('/sendResponseToBot');
 	});	
