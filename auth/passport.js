@@ -54,7 +54,7 @@ module.exports = function(passport) {
 			
 			var person = {
 					facebook:{
-						"id":profile.id
+						"id":profile.id,
 						"token":token,
 						"name":profile.displayName,
 						"email":profile.emails[0].value
