@@ -12,8 +12,8 @@ module.exports = function(router, passport){
 	});
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){		
 		var queryParam = url.parse(req.headers.referer, true);
-		console.log(req.params,req.query,req.user,'user info');
-		sendMessageToBot(req.user,queryParam.query['rid']);
+		console.log(req.query,req.user,'user info');
+		sendMessageToBot(req.query['src'],req.user,queryParam.query['rid']);
 		res.sendFile(path.resolve('./public/closeWindow.html'));
 	})
 	router.get('/auth/facebook', passport.authenticate('facebook', { 
@@ -128,7 +128,7 @@ function verify(token, recipientId) {
 
 
 
-function sendMessageToBot(user, recipientId){
+function sendMessageToBot(src, user, recipientId){
 	var queryParams = {};
 	/*var messageToSend = {			
 			"speech": "",								
@@ -154,7 +154,7 @@ function sendMessageToBot(user, recipientId){
 					  "elements": [{
 						"title":'login sucess',
 						"image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
-						"subtitle": "Welcome to Demobot, Mr/Mrs/Miss."+user.name				
+						"subtitle": "Welcome to Demobot, Mr/Mrs/Miss."+user[src].name				
 					  }]
 					}
 				}
