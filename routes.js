@@ -15,16 +15,27 @@ module.exports = function(router, passport){
 		  scope : ['public_profile', 'email']
 	}));
 
-	router.get('/auth/facebook/callback',
+	router.get('/auth/facebook/callback',function(req,res, next){
 		passport.authenticate('facebook', {
-			successRedirect : '/sendResponseToBot',
-			failureRedirect : '/'
-	}));	
-	router.get('/auth/google/callback',
-		passport.authenticate('google', {
-			successRedirect : '/sendResponseToBot',
-			failureRedirect : '/'
-	}));	
+				successRedirect : '/sendResponseToBot',
+				failureRedirect : '/'
+		},function(err, user, info){
+			if(err){
+				console.log(err);
+			}
+		}
+	})
+	router.get('/auth/google/callback',function(req,res, next){
+		passport.authenticate('facebook', {
+				successRedirect : '/sendResponseToBot',
+				failureRedirect : '/'
+		},function(err, user, info){
+			if(err){
+				console.log(err);
+			}
+		}
+	})
+	
 	router.get('/logout', function(req, res) {
 		req.logout();
 		res.redirect('/');
