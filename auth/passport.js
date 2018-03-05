@@ -10,6 +10,7 @@ var User       = require('./../users/users.json');
 // load the auth variables
 var configAuth = require('./configAuth');
 console.log(User);
+
 module.exports = function(passport) {
 
     // used to serialize the user for the session
@@ -50,7 +51,7 @@ module.exports = function(passport) {
 				User.facebook[profile.id] = {
 					id:profile.id,
 					token:token,
-					name : profile.name.givenName + ' ' + profile.name.familyName
+					name : profile.displayName
 				}
 				console.log(User);
 				fs.writeFile('users/users.json',JSON.stringify(User),function(err){
@@ -82,7 +83,7 @@ module.exports = function(passport) {
 				User.google[profile.id] = {
 					id:profile.id,
 					token:token,
-					name : profile.name.givenName + ' ' + profile.name.familyName
+					name : profile.displayName
 				}
 				console.log(User);
 				fs.writeFile('users/users.json',JSON.stringify(User),function(err,data){

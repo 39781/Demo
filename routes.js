@@ -5,7 +5,10 @@ module.exports = function(router, passport){
 	router.get('/', function(req, res) {
 		res.sendFile(path.resolve('./public/login.html')); // load the index.ejs file
 	});
-
+	router.get('/loginFailed', function(req, res) {
+		console.log('login failed');
+		res.sendFile(path.resolve('./public/login.html')); // load the index.ejs file
+	});
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
 		console.log(req.user);
 		sendMessageToBot(req.user);
@@ -15,24 +18,23 @@ module.exports = function(router, passport){
 		  scope : ['public_profile', 'email']
 	}));
 
-	router.get('/auth/facebook/callback',function(req,res){
+	router.get('/auth/facebook/callback',
 		passport.authenticate('facebook', {
 			successRedirect : '/sendResponseToBot',
 			failureRedirect : '/'
-		})
-	});	
-	router.get('/auth/google/callback',function(req, res){
-		passport.authenticate('google', {
+	}));	
+	router.get('/auth/google/callback',
+		passport.authenticate('google', {			
 			successRedirect : '/sendResponseToBot',
 			failureRedirect : '/'
-		})
-	});	
+			
+	}));	
 	router.get('/logout', function(req, res) {
 		req.logout();
 		res.redirect('/');
 	});
 
-	router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+	router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email','https://www.googleapis.com/auth/plus.login'] }));
 	
 
 	router.get('/test',function(req,res){
