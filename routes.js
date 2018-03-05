@@ -1,15 +1,15 @@
 var DialogflowApp	=	require('actions-on-google').DialogflowApp;
 var request			=	require('request');
-	
+var path 			=	require('path');	
 module.exports = function(router, passport){
 	router.get('/', function(req, res) {
-		res.render('login.html'); // load the index.ejs file
+		res.sendFile(path.resolve('./public/login.html')); // load the index.ejs file
 	});
 
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
 		console.log(req.user);
 		sendMessageToBot(req.user);
-		res.render('closeWindow.html');
+		res.sendFile(path.reslove('.public/closeWindow.html'));
 	})
 	router.get('/auth/facebook', passport.authenticate('facebook', { 
 		  scope : ['public_profile', 'email']
