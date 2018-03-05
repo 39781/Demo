@@ -52,7 +52,7 @@ module.exports = function(passport) {
 						"id":profile.id,
 						"token":token,
 						"name":profile.displayName,
-						"email":profile.emails[0].value
+						"email":(profile.emails[0])?profile.emails[0].value:""
 					}
 				}
 			process.nextTick(function() {
@@ -90,7 +90,7 @@ module.exports = function(passport) {
 						"id":profile.id,
 						"token":token,
 						"name":profile.displayName,
-						"email":profile.emails[0].value
+						"email":(profile.emails[0])?profile.emails[0].value:""
 					}
 				}
 			process.nextTick(function() {
