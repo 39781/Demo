@@ -118,7 +118,7 @@ module.exports = function(passport) {
 						}
 					});
 				} 
-				return done(null, User.google[profile.Id]);        
+				return done(null, person);        
 			})
 		}else{
 			return done(err, {});        
