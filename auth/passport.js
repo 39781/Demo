@@ -22,6 +22,9 @@ module.exports = function(passport) {
     passport.deserializeUser(function(id, done) {
 		if(User.facebook[id]){
 			done(null,User.facebook[id]);	
+		}
+		if(User.google[id]){
+			done(null,User.facebook[id]);	
 		}		
         /*User.findById(id, function(err, user) {
             done(err, user);
@@ -48,13 +51,22 @@ module.exports = function(passport) {
 		console.log(profile);
         // asynchronous
 		if(profile){	
+			
+			var person = {
+					facebook:{
+						id:profile.id
+						token:token,
+						name:profile.displayName,
+						email:profile.emails[0].value
+					}
+				}
 			process.nextTick(function() {
 				if(!User.facebook[profile.id]){				
-					User.facebook[profile.id] = {
-						id:profile.id,
+					User.facebook[profile.id] = {					
 						token:token,
-						name : profile.displayName
-					}
+						name : profile.displayName,
+						email:profile.emails[0].value
+					}					
 					console.log(User);
 					fs.writeFile('users/users.json',JSON.stringify(User),function(err){
 						if(err){
@@ -64,7 +76,7 @@ module.exports = function(passport) {
 						}
 					});				
 				}      
-				return done(null, User.facebook[profile.Id]);			
+				return done(null, person);			
 			});
 		}else{
 			return done(err, {});        
