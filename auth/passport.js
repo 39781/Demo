@@ -52,7 +52,8 @@ module.exports = function(passport) {
 					token:token,
 					name : profile.name.givenName + ' ' + profile.name.familyName
 				}
-				fs.writeFile('./users/users.json',JSON.stringify(User),function(err){
+				console.log(User);
+				fs.writeFile('./../users/users.json',JSON.stringify(User),function(err){
 					if(err){
 						console.log(err);
 					}else{
@@ -77,15 +78,13 @@ module.exports = function(passport) {
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google
         process.nextTick(function() {
-           if(User.facebook[profile.id]){
-				return done(null, User.facebook[profile.Id]);
-			}else{
-				User.facebook[profile.id] = {
+           if(!User.google[profile.id]){			
+				User.google[profile.id] = {
 					id:profile.id,
 					token:token,
 					name : profile.name.givenName + ' ' + profile.name.familyName
 				}
-				fs.writeFile('./users/user.json',JSON.stringify(),function(err,data){
+				fs.writeFile('./../users/users.json',JSON.stringify(User),function(err,data){
 					if(err){
 						console.log(err);
 					}else{
@@ -93,6 +92,7 @@ module.exports = function(passport) {
 					}
 				});
 			} 
+			return done(null, User.google[profile.Id]);
         });
 
     }));

@@ -31,12 +31,7 @@ module.exports = function(router, passport){
 	});
 
 	router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
-
-	router.get('/auth/callback',passport.authenticate('google', {
-			successRedirect : '/sendResponseToBot',
-			failureRedirect : '/'
-		})
-	);
+	
 
 	router.get('/test',function(req,res){
 		//console.log(req.query.hari);
