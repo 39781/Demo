@@ -94,12 +94,20 @@ module.exports = function(passport) {
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google   
 		if(profile){	
+			var person = {
+					google:{
+						"id":profile.id,
+						"token":token,
+						"name":profile.displayName,
+						"email":profile.emails[0].value
+					}
+				}
 			process.nextTick(function() {
 			   if(!User.google[profile.id]){			
-					User.google[profile.id] = {
-						id:profile.id,
+					User.google[profile.id] = {						
 						"token":token,
-						name : profile.displayName
+						name : profile.displayName,
+						"email":profile.emails[0].value
 					}
 					console.log(User);
 					fs.writeFile('users/users.json',JSON.stringify(User),function(err,data){
