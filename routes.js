@@ -10,6 +10,7 @@ module.exports = function(router, passport){
 		res.sendFile(path.resolve('./public/login.html')); // load the index.ejs file
 	});
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
+		console.log(req);
 		console.log('sendresponsebot',req.user);
 		console.log('req senderid',req.cookies);
 		sendMessageToBot(req.user,req.cookies.appSenderId);
