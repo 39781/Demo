@@ -46,22 +46,21 @@ module.exports = function(passport) {
     function(token, refreshToken, profile, done) {
         // asynchronous
         process.nextTick(function() {
-			if(User.facebook[profile.id]){
-				return done(null, User.facebook[profile.Id]);
-			}else{
+			if(!User.facebook[profile.id]){				
 				User.facebook[profile.id] = {
 					id:profile.id,
 					token:token,
 					name : profile.name.givenName + ' ' + profile.name.familyName
 				}
-				fs.writeFile('./users/users.json',JSON.stringify(User),function(err,data){
+				fs.writeFile('./users/users.json',JSON.stringify(User),function(err){
 					if(err){
 						console.log(err);
 					}else{
-						console.log('User added');
+						console.log('User added');						
 					}
-				});
-			}            
+				});				
+			}      
+			return done(null, User.facebook[profile.Id]);			
         });
 
     }));
