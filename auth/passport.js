@@ -54,18 +54,18 @@ module.exports = function(passport) {
 			
 			var person = {
 					facebook:{
-						id:profile.id
-						token:token,
-						name:profile.displayName,
-						email:profile.emails[0].value
+						"id":profile.id
+						"token":token,
+						"name":profile.displayName,
+						"email":profile.emails[0].value
 					}
 				}
 			process.nextTick(function() {
 				if(!User.facebook[profile.id]){				
 					User.facebook[profile.id] = {					
-						token:token,
-						name : profile.displayName,
-						email:profile.emails[0].value
+						"token":token,
+						"name" : profile.displayName,
+						"email":profile.emails[0].value
 					}					
 					console.log(User);
 					fs.writeFile('users/users.json',JSON.stringify(User),function(err){
@@ -98,7 +98,7 @@ module.exports = function(passport) {
 			   if(!User.google[profile.id]){			
 					User.google[profile.id] = {
 						id:profile.id,
-						token:token,
+						"token":token,
 						name : profile.displayName
 					}
 					console.log(User);
