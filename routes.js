@@ -11,7 +11,7 @@ module.exports = function(router, passport){
 	});
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
 		console.log('sendresponsebot',req.user);
-		console.log('req senderid',req.session.senderId);
+		console.log('req senderid',req.session.senderId, req.session);
 		sendMessageToBot(req.user,req.session.senderId);
 		res.sendFile(path.resolve('./public/closeWindow.html'));
 	})
