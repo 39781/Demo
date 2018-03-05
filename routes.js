@@ -44,7 +44,7 @@ module.exports = function(router, passport){
 
 	router.post('/botHandler',function(req, res){
 		//console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
-		
+			var ssn = req.session;
 			
 			let requestSource = (req.body.originalRequest) ? req.body.originalRequest.source : undefined;	
 			console.log(requestSource);
@@ -53,9 +53,9 @@ module.exports = function(router, passport){
 			var sessionId = (req.body.sessionId)?req.body.sessionId:'';
 			var resolvedQuery = req.body.result.resolvedQuery;	
 			let botResponses = require('./'+requestSource);		
-			let senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
-			req.session.senderId = senderId;
-			console.log('senderid',senderId);
+			ssn.senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
+			 
+			console.log('senderid',ssn.senderId);
 			if(action.toLowerCase() == 'demo'){			
 				let resp = openLoginWebView(senderId);
 				console.log(JSON.stringify(resp));
