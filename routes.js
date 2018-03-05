@@ -15,12 +15,16 @@ module.exports = function(router, passport){
 		  scope : ['public_profile', 'email']
 	}));
 
-	router.get('/auth/callback',
+	router.get('/auth/facebook/callback',
 		passport.authenticate('facebook', {
 			successRedirect : '/sendResponseToBot',
 			failureRedirect : '/'
 	}));	
-
+	router.get('/auth/google/callback',
+		passport.authenticate('google', {
+			successRedirect : '/sendResponseToBot',
+			failureRedirect : '/'
+	}));	
 	router.get('/logout', function(req, res) {
 		req.logout();
 		res.redirect('/');
