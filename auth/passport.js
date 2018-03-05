@@ -54,7 +54,7 @@ module.exports = function(passport) {
 					token:token,
 					name : profile.name.givenName + ' ' + profile.name.familyName
 				}
-				fs.writeFile('./users/user.json',JSON.stringify(),function(err,data){
+				fs.writeFile('./users/users.json',JSON.stringify(User),function(err,data){
 					if(err){
 						console.log(err);
 					}else{
