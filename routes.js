@@ -23,7 +23,7 @@ module.exports = function(router, passport){
 			if(err){
 				console.log(err);
 			}
-		}
+		});
 	})
 	router.get('/auth/google/callback',function(req,res, next){
 		passport.authenticate('facebook', {
@@ -33,7 +33,7 @@ module.exports = function(router, passport){
 			if(err){
 				console.log(err);
 			}
-		}
+		});
 	})
 	
 	router.get('/logout', function(req, res) {
