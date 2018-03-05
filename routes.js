@@ -15,27 +15,18 @@ module.exports = function(router, passport){
 		  scope : ['public_profile', 'email']
 	}));
 
-	router.get('/auth/facebook/callback',function(req,res, next){
+	router.get('/auth/facebook/callback',function(req,res){
 		passport.authenticate('facebook', {
-				successRedirect : '/sendResponseToBot',
-				failureRedirect : '/'
-		},function(err, user, info){
-			if(err){
-				console.log(err);
-			}
-		});
-	})
-	router.get('/auth/google/callback',function(req,res, next){
-		passport.authenticate('facebook', {
-				successRedirect : '/sendResponseToBot',
-				failureRedirect : '/'
-		},function(err, user, info){
-			if(err){
-				console.log(err);
-			}
-		});
-	})
-	
+			successRedirect : '/sendResponseToBot',
+			failureRedirect : '/'
+		})
+	});	
+	router.get('/auth/google/callback',function(req, res){
+		passport.authenticate('google', {
+			successRedirect : '/sendResponseToBot',
+			failureRedirect : '/'
+		})
+	});	
 	router.get('/logout', function(req, res) {
 		req.logout();
 		res.redirect('/');
@@ -91,7 +82,7 @@ module.exports = function(router, passport){
 }
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
-	console.log(req.isAuthenticated(),req);
+	console.log(req.isAuthenticated);
     // if user is authenticated in the session, carry on
     if (req.isAuthenticated())
         return next();
