@@ -12,6 +12,7 @@ module.exports = function(router, passport){
 	});
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){		
 		var queryParam = url.parse(req.headers.referer, true);
+		console.log(req.user,'user info');
 		sendMessageToBot(req.user,queryParam.query['rid']);
 		res.sendFile(path.resolve('./public/closeWindow.html'));
 	})
