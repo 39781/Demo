@@ -16,7 +16,7 @@ module.exports = function(router, passport){
 	})
 	router.get('/auth/facebook',function(req, res){		
 		 passport.authenticate('facebook', { 
-			  scope : ['public_profile', 'email'],state:req.query.appId
+			  scope : ['public_profile', 'email'],state:"appId="+req.query.appId+'&redirecURI='+req.query.redirecURI
 			  
 		})(req, res);
 	});

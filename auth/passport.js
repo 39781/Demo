@@ -1,8 +1,8 @@
 
-var LocalStrategy    = require('passport-local').Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-
+var LocalStrategy		= require('passport-local').Strategy;
+var FacebookStrategy	= require('passport-facebook').Strategy;
+var GoogleStrategy 		= require('passport-google-oauth').OAuth2Strategy;
+const querystring = require('querystring');
 var fs = require('fs');
 // load up the user model
 var User       = require('./../users/users.json');
@@ -41,13 +41,17 @@ module.exports = function(passport) {
 		passReqToCallback: true		
     },
     // facebook will send back the token and profile
-    function(req, token, refreshToken, profile, done) {		
+    function(req, token, refreshToken, profile, done) {			
         // asynchronous		
+		console.log(req.query.state);
+		var queryParams = querystring.parse(req.query.state, null, null,
+                  { decodeURIComponent: "" });
 		if(profile){	
 			
 			var person = {
 					facebook:{
-						"recipientId":req.query.state,
+						"redirectURI":params.redirecURI,
+						"recipientId":params.appId,
 						"id":profile.id,
 						"token":token,
 						"name":profile.displayName,
@@ -83,10 +87,14 @@ module.exports = function(passport) {
     function(req, token, refreshToken, profile, done) {		
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google   
-		console.log(req);
+		console.log(req.query.state);
+		var queryParams = querystring.parse(req.query.state, null, null,
+                  { decodeURIComponent: "" });
 		if(profile){	
 			var person = {
 					google:{
+						"redirectURI":params.redirecURI,
+						"recipientId":params.appId,
 						"recipientId":req.query.state,
 						"id":profile.id,
 						"token":token,
