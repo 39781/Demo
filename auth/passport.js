@@ -50,8 +50,8 @@ module.exports = function(passport) {
 			
 			var person = {
 					facebook:{
-						"redirectURI":params.redirecURI,
-						"recipientId":params.appId,
+						"redirectURI":queryParams.redirecURI,
+						"recipientId":queryParams.appId,
 						"id":profile.id,
 						"token":token,
 						"name":profile.displayName,
@@ -93,9 +93,8 @@ module.exports = function(passport) {
 		if(profile){	
 			var person = {
 					google:{
-						"redirectURI":params.redirecURI,
-						"recipientId":params.appId,
-						"recipientId":req.query.state,
+						"redirectURI":queryParams.redirecURI,
+						"recipientId":queryParams.appId,					
 						"id":profile.id,
 						"token":token,
 						"name":profile.displayName,

@@ -16,7 +16,7 @@ module.exports = function(router, passport){
 	})
 	router.get('/auth/facebook',function(req, res){		
 		 passport.authenticate('facebook', { 
-			  scope : ['public_profile', 'email'],state:"appId="+req.query.appId+'&redirecURI='+req.query.redirecURI
+			  scope : ['public_profile', 'email'],state:"appId="+req.query.appId+'&redirectURI='+req.query.redirectURI
 			  
 		})(req, res);
 	});
@@ -37,7 +37,7 @@ module.exports = function(router, passport){
 	});
 
 	router.get('/auth/google',function(req, res){ 
-		passport.authenticate('google', { scope : ['profile','email'],state:req.query.appId})(req, res);
+		passport.authenticate('google', { scope : ['profile','email'],state::"appId="+req.query.appId+'&redirectURI='+req.query.redirectURI})(req, res);
 	});
 	
 
