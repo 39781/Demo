@@ -37,7 +37,7 @@ module.exports = function(router, passport){
 	});
 
 	router.get('/auth/google',function(req, res){ 
-		passport.authenticate('google', { scope : ['profile','email'],state::"appId="+req.query.appId+'&redirectURI='+req.query.redirectURI})(req, res);
+		passport.authenticate('google', { scope : ['profile','email'],state:"appId="+req.query.appId+'&redirectURI='+req.query.redirectURI})(req, res);
 	});
 	
 
