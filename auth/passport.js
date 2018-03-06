@@ -46,11 +46,12 @@ module.exports = function(passport) {
 		console.log(req.query.state);
 		var queryParams = querystring.parse(req.query.state, null, null,
                   { decodeURIComponent: "" });
+				  console.log(queryParams);
 		if(profile){	
 			
 			var person = {
 					facebook:{
-						"redirectURI":queryParams.redirecURI,
+						"redirectURI":queryParams.redirectURI,
 						"recipientId":queryParams.appId,
 						"id":profile.id,
 						"token":token,
@@ -90,10 +91,11 @@ module.exports = function(passport) {
 		console.log(req.query.state);
 		var queryParams = querystring.parse(req.query.state, null, null,
                   { decodeURIComponent: "" });
+		console.log(queryParams);			
 		if(profile){	
 			var person = {
 					google:{
-						"redirectURI":queryParams.redirecURI,
+						"redirectURI":queryParams.redirectURI,
 						"recipientId":queryParams.appId,					
 						"id":profile.id,
 						"token":token,
