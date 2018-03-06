@@ -39,13 +39,12 @@ module.exports = function(passport) {
         // pull in our app id and secret from our auth.js file
         clientID        : configAuth.facebook.clientID,
         clientSecret    : configAuth.facebook.clientSecret,
-        callbackURL     : configAuth.facebook.callbackURL
-
+        callbackURL     : configAuth.facebook.callbackURL,
+		passReqToCallback : true
     },
-
     // facebook will send back the token and profile
-    function(token, refreshToken, profile, done) {
-		console.log(profile);
+    function(req, token, refreshToken, profile, done) {
+		console.log(profile, req);
         // asynchronous
 		if(profile){	
 			process.nextTick(function() {

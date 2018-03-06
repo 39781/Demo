@@ -16,10 +16,19 @@
 
         <p>Login or Register with:</p>
 
-        <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
-		<a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google</a>
+        <a href="/auth/facebook" class="socialLogins btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+		<a href="/auth/google" class="socialLogins btn btn-danger"><span class="fa fa-google-plus"></span> Google</a>
     </div>
-
 </div>
+<script>
+	var url_string = window.location.href;
+	var url = new URL(url_string);
+	var appId = url.searchParams.get('rid');
+	var array = document.getElementsByClassName('socialLogins');
+	console.log(document.getElementsByClassName('socialLogins').length);
+	for (var i = 0; i < array.length; i++){
+		array[i].href = array[i].href+'?appId='+appId;		
+	}	
+</script>
 </body>
 </html>   

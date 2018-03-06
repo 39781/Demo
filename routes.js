@@ -35,7 +35,7 @@ module.exports = function(router, passport){
 		res.redirect('/');
 	});
 
-	router.get('/auth/google', passport.authenticate('google', { scope : ['profile','email','https://www.googleapis.com/auth/plus.profile.emails.read'] }));
+	router.get('/auth/google', passport.authenticate('google', { scope : ['profile','email'] }));
 	
 
 	router.get('/test',function(req,res){
