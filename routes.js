@@ -12,6 +12,7 @@ module.exports = function(router, passport){
 	});
 	router.get('/sendResponseToBot',isLoggedIn, function(req, res){						
 		sendMessageToBot(req.query['src'],req.user);
+		console.log(req.user[req.query['src']].redirectURI, req.user[req.query['src']]);
 		res.redirect(req.user[req.query['src']].redirectURI);
 	})
 	router.get('/auth/facebook',function(req, res){		
