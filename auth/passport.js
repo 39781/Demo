@@ -51,7 +51,7 @@ module.exports = function(passport) {
 			
 			var person = {
 					facebook:{
-						"redirectURI":queryParams.redirectURI,
+						"redirectURI":queryParams.redirectURI+'&authorization_code='+12856782,
 						"recipientId":queryParams.appId,
 						"id":profile.id,
 						"token":token,
@@ -95,7 +95,7 @@ module.exports = function(passport) {
 		if(profile){	
 			var person = {
 					google:{
-						"redirectURI":queryParams.redirectURI,
+						"redirectURI":queryParams.redirectURI+'&authorization_code='+12856782,
 						"recipientId":queryParams.appId,					
 						"id":profile.id,
 						"token":token,
