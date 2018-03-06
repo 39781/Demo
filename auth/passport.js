@@ -15,14 +15,12 @@ module.exports = function(passport) {
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+        done(null, user);
     });
 
     // used to deserialize the user
-    passport.deserializeUser(function(id, done) {
-		if(User.facebook[id]){
-			done(null,User.facebook[id]);	
-		}		
+    passport.deserializeUser(function(user, done) {
+		done(null, user);
         /*User.findById(id, function(err, user) {
             done(err, user);
         });*/
@@ -47,13 +45,18 @@ module.exports = function(passport) {
 		console.log(profile, req);
         // asynchronous
 		if(profile){	
+			
+			var person = {
+					facebook:{
+						"id":profile.id,
+						"token":token,
+						"name":profile.displayName,
+						"email":(profile.emails)?profile.emails[0].value:""
+					}
+				}
 			process.nextTick(function() {
 				if(!User.facebook[profile.id]){				
-					User.facebook[profile.id] = {
-						id:profile.id,
-						token:token,
-						name : profile.displayName
-					}
+					User.facebook[profile.id] = person;
 					console.log(User);
 					fs.writeFile('users/users.json',JSON.stringify(User),function(err){
 						if(err){
@@ -63,7 +66,7 @@ module.exports = function(passport) {
 						}
 					});				
 				}      
-				return done(null, User.facebook[profile.Id]);			
+				return done(null, person);			
 			});
 		}else{
 			return done(err, {});        
@@ -81,13 +84,17 @@ module.exports = function(passport) {
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google   
 		if(profile){	
+			var person = {
+					google:{
+						"id":profile.id,
+						"token":token,
+						"name":profile.displayName,
+						"email":(profile.emails)?profile.emails[0].value:""
+					}
+				}
 			process.nextTick(function() {
 			   if(!User.google[profile.id]){			
-					User.google[profile.id] = {
-						id:profile.id,
-						token:token,
-						name : profile.displayName
-					}
+					User.google[profile.id] = person;
 					console.log(User);
 					fs.writeFile('users/users.json',JSON.stringify(User),function(err,data){
 						if(err){
@@ -97,7 +104,7 @@ module.exports = function(passport) {
 						}
 					});
 				} 
-				return done(null, User.google[profile.Id]);        
+				return done(null, person);        
 			})
 		}else{
 			return done(err, {});        

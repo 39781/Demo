@@ -1,6 +1,7 @@
 var DialogflowApp	=	require('actions-on-google').DialogflowApp;
 var request			=	require('request');
 var path 			=	require('path');	
+var url				=	require('url');
 module.exports = function(router, passport){
 	router.get('/', function(req, res) {
 		res.sendFile(path.resolve('./public/login.html')); // load the index.ejs file
@@ -9,10 +10,11 @@ module.exports = function(router, passport){
 		console.log('login failed');
 		res.sendFile(path.resolve('./public/login.html')); // load the index.ejs file
 	});
-	router.get('/sendResponseToBot',isLoggedIn, function(req, res){
-		console.log('sendresponsebot',req.user);
-		sendMessageToBot(req.user);
-		res.sendFile(path.reslove('./public/closeWindow.html'));
+	router.get('/sendResponseToBot',isLoggedIn, function(req, res){		
+		var queryParam = url.parse(req.headers.referer, true);
+		console.log(req.headers.referer,req.query,req.user,'user info');
+		sendMessageToBot(req.query['src'],req.user,queryParam.query['rid']);
+		res.sendFile(path.resolve('./public/closeWindow.html'));
 	})
 	router.get('/auth/facebook', passport.authenticate('facebook', { 
 		  scope : ['public_profile', 'email']
@@ -20,16 +22,14 @@ module.exports = function(router, passport){
 
 	router.get('/auth/facebook/callback',
 		passport.authenticate('facebook', {
-			successRedirect : '/sendResponseToBot',
-			failureRedirect : '/loginFailed'
+			successRedirect : '/sendResponseToBot?src=facebook',
+			failureRedirect : '/'
 	}));	
 	router.get('/auth/google/callback',
 		passport.authenticate('google', {			
-			//successRedirect : '/sendResponseToBot',
-			failureRedirect : '/loginFailed'			
-	}),function(req, res) {
-		res.redirect('/sendResponseToBot');
-	});	
+			successRedirect : '/sendResponseToBot?src=google',
+			failureRedirect : '/'			
+	}));	
 	router.get('/logout', function(req, res) {
 		req.logout();
 		res.redirect('/');
@@ -44,9 +44,9 @@ module.exports = function(router, passport){
 	})
 
 	router.post('/botHandler',function(req, res){
-		//console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
-		
-		
+		console.log('Dialogflow Request headers: ' + JSON.stringify(req.body));
+			
+			
 			let requestSource = (req.body.originalRequest) ? req.body.originalRequest.source : undefined;	
 			console.log(requestSource);
 			let action = req.body.result.action; // https://dialogflow.com/docs/actions-and-parameters			
@@ -55,6 +55,8 @@ module.exports = function(router, passport){
 			var resolvedQuery = req.body.result.resolvedQuery;	
 			let botResponses = require('./'+requestSource);		
 			let senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
+			res.cookie('appSenderId',senderId, { maxAge: 900000, httpOnly: true });
+			console.log('senderid',senderId);
 			if(action.toLowerCase() == 'demo'){			
 				let resp = openLoginWebView(senderId);
 				console.log(JSON.stringify(resp));
@@ -126,7 +128,7 @@ function verify(token, recipientId) {
 
 
 
-function sendMessageToBot(recipientId){
+function sendMessageToBot(src, user, recipientId){
 	var queryParams = {};
 	/*var messageToSend = {			
 			"speech": "",								
@@ -152,7 +154,7 @@ function sendMessageToBot(recipientId){
 					  "elements": [{
 						"title":'login sucess',
 						"image_url": "https://raw.githubusercontent.com/39781/incidentMG/master/images/incidentMG.jpg",
-						"subtitle": "Welcome to Demobot"				
+						"subtitle": "Welcome to Demobot, Mr/Mrs/Miss."+user[src].name				
 					  }]
 					}
 				}
