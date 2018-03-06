@@ -83,6 +83,7 @@ module.exports = function(passport) {
     function(req, token, refreshToken, profile, done) {		
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google   
+		console.log(req);
 		if(profile){	
 			var person = {
 					google:{
