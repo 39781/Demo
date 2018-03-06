@@ -42,13 +42,12 @@ module.exports = function(passport) {
     },
     // facebook will send back the token and profile
     function(req, token, refreshToken, profile, done) {		
-        // asynchronous
-		console.log(req);
+        // asynchronous		
 		if(profile){	
 			
 			var person = {
 					facebook:{
-						"senderId":"",
+						"recipientId":req.query.state,
 						"id":profile.id,
 						"token":token,
 						"name":profile.displayName,
@@ -79,14 +78,15 @@ module.exports = function(passport) {
         clientID        : configAuth.google.clientID,
         clientSecret    : configAuth.google.clientSecret,
         callbackURL     : configAuth.google.callbackURL,		
+		passReqToCallback: true	
     },
-    function(token, refreshToken, profile, done) {
-		console.log(profile);
+    function(req, token, refreshToken, profile, done) {		
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google   
 		if(profile){	
 			var person = {
 					google:{
+						"recipientId":req.query.state,
 						"id":profile.id,
 						"token":token,
 						"name":profile.displayName,

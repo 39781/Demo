@@ -10,14 +10,11 @@ module.exports = function(router, passport){
 		console.log('login failed');
 		res.sendFile(path.resolve('./public/login.html')); // load the index.ejs file
 	});
-	router.get('/sendResponseToBot',isLoggedIn, function(req, res){		
-		var queryParam = url.parse(req.headers.referer, true);
-		console.log(req.headers.referer,req.query,req.user,'user info');
-		sendMessageToBot(req.query['src'],req.user,queryParam.query['rid']);
+	router.get('/sendResponseToBot',isLoggedIn, function(req, res){						
+		sendMessageToBot(req.query['src'],req.user);
 		res.sendFile(path.resolve('./public/closeWindow.html'));
 	})
-	router.get('/auth/facebook',function(req, res){
-		console.log(req.query.appId);	
+	router.get('/auth/facebook',function(req, res){		
 		 passport.authenticate('facebook', { 
 			  scope : ['public_profile', 'email'],state:req.query.appId
 			  
@@ -49,8 +46,7 @@ module.exports = function(router, passport){
 
 	router.post('/botHandler',function(req, res){
 		console.log('Dialogflow Request headers: ' + JSON.stringify(req.body));
-			
-			
+						
 			let requestSource = (req.body.originalRequest) ? req.body.originalRequest.source : undefined;	
 			console.log(requestSource);
 			let action = req.body.result.action; // https://dialogflow.com/docs/actions-and-parameters			
@@ -58,9 +54,7 @@ module.exports = function(router, passport){
 			var sessionId = (req.body.sessionId)?req.body.sessionId:'';
 			var resolvedQuery = req.body.result.resolvedQuery;	
 			let botResponses = require('./'+requestSource);		
-			let senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;
-			res.cookie('appSenderId',senderId, { maxAge: 900000, httpOnly: true });
-			console.log('senderid',senderId);
+			let senderId = (req.body.originalRequest)?req.body.originalRequest.data.sender.id:undefined;			
 			if(action.toLowerCase() == 'demo'){			
 				let resp = openLoginWebView(senderId);
 				console.log(JSON.stringify(resp));
@@ -99,40 +93,7 @@ function isLoggedIn(req, res, next) {
     res.redirect('/');
 }
 
-
-function verify(token, recipientId) {
-	console.log('verify calling');
-	return new Promise(function(resolve, reject){
-	  const client = new OAuth2Client('93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com');
-	  client.verifyIdToken({
-		  idToken: token,
-		  audience: '93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com',  
-	  },function(e, ticket){
-		  if(e){
-			  console.log(e);
-			  resolve({userValid:false});
-		  }else{
-			const payload = ticket.getPayload();
-			const userid = payload['sub'];
-			console.log(payload);
-			if(payload['iss']=='accounts.google.com'&&payload['aud']=='93244704256-qao2ngc31bb93k1uifsn42ffo5rmsbs1.apps.googleusercontent.com'&&payload['email_verified']){
-				sendMessageToBot(recipientId);
-				resolve({name:payload['name'],userId : payload['sub'],userValid:true});
-			}else{
-				resolve({name:payload['name'],userId : payload['sub'],userValid:false});
-			}	  
-		  }
-		  
-	  });	  
-	 	  
-	});
-}
-
-
-
-
-
-function sendMessageToBot(src, user, recipientId){
+function sendMessageToBot(src, user){
 	var queryParams = {};
 	/*var messageToSend = {			
 			"speech": "",								
@@ -148,7 +109,7 @@ function sendMessageToBot(src, user, recipientId){
 		};*/
 		var messageToSend = {
 			recipient: {
-			  id: recipientId,
+			  id: user[src].recipientId,
 			},
 			message: {
 				"attachment":{
