@@ -16,9 +16,13 @@ module.exports = function(router, passport){
 		sendMessageToBot(req.query['src'],req.user,queryParam.query['rid']);
 		res.sendFile(path.resolve('./public/closeWindow.html'));
 	})
-	router.get('/auth/facebook', passport.authenticate('facebook', { 
-		  scope : ['public_profile', 'email']
-	}));
+	router.get('/auth/facebook',function(req, res){
+		console.log(req.query.appId);	
+		 passport.authenticate('facebook', { 
+			  scope : ['public_profile', 'email'],state:req.query.appId
+			  
+		})(req, res);
+	});
 
 	router.get('/auth/facebook/callback',
 		passport.authenticate('facebook', {
